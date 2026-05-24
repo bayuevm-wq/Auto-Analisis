@@ -1,0 +1,10 @@
+tvdatafeed>=2.1.0
+pandas>=2.0.0
+numpy>=1.24.0
+PyYAML>=6.0
+flask>=3.0.0
+vaderSentiment>=3.3.2
+gnews>=0.3.6
+apscheduler>=3.10.4
+python-dotenv>=1.0.0
+requests>=2.31.0

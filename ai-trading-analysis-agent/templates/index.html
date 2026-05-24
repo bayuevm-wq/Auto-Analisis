@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Trading Engine Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
+</head>
+<body>
+    <div class="layout-wrapper">
+        <!-- Sidebar / Config Panel -->
+        <aside class="sidebar glass-panel">
+            <h2 class="brand">AI Engine <span>Pro</span></h2>
+            
+            <div class="config-section">
+                <h3>Analysis Configuration</h3>
+                <div class="config-row">
+                    <div class="input-group compact">
+                        <label>Pair</label>
+                        <select id="pair">
+                            <optgroup label="Top 5">
+                                <option value="BTC/USDT">BTC/USDT</option>
+                                <option value="ETH/USDT">ETH/USDT</option>
+                                <option value="XRP/USDT">XRP/USDT</option>
+                                <option value="BNB/USDT">BNB/USDT</option>
+                                <option value="SOL/USDT">SOL/USDT</option>
+                            </optgroup>
+                            <optgroup label="Top 6 – 20">
+                                <option value="ADA/USDT">ADA/USDT</option>
+                                <option value="DOGE/USDT" selected>DOGE/USDT</option>
+                                <option value="TRX/USDT">TRX/USDT</option>
+                                <option value="AVAX/USDT">AVAX/USDT</option>
+                                <option value="LINK/USDT">LINK/USDT</option>
+                                <option value="DOT/USDT">DOT/USDT</option>
+                                <option value="TON/USDT">TON/USDT</option>
+                                <option value="SHIB/USDT">SHIB/USDT</option>
+                                <option value="XLM/USDT">XLM/USDT</option>
+                                <option value="SUI/USDT">SUI/USDT</option>
+                                <option value="HBAR/USDT">HBAR/USDT</option>
+                                <option value="BCH/USDT">BCH/USDT</option>
+                                <option value="LTC/USDT">LTC/USDT</option>
+                                <option value="UNI/USDT">UNI/USDT</option>
+                                <option value="NEAR/USDT">NEAR/USDT</option>
+                            </optgroup>
+                        </select>
+                    </div>
+                    <div class="input-group compact">
+                        <label>Timeframe</label>
+                        <select id="timeframe">
+                            <option value="15m">15m</option>
+                            <option value="1h">1H</option>
+                            <option value="4h" selected>4H</option>
+                            <option value="1d">1D</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="config-row">
+                    <div class="input-group compact">
+                        <label>Style</label>
+                        <select id="style">
+                            <option value="scalping">Scalping</option>
+                            <option value="intraday">Intraday</option>
+                            <option value="swing" selected>Swing</option>
+                        </select>
+                    </div>
+                    <div class="input-group compact">
+                        <label>Candles</label>
+                        <select id="limit">
+                            <option value="100">100</option>
+                            <option value="300">300</option>
+                            <option value="500" selected>500</option>
+                            <option value="1000">1000</option>
+                        </select>
+                    </div>
+                </div>
+                <button id="btn-analyze" class="btn-primary">Generate Analysis</button>
+            </div>
+
+            <div class="divider"></div>
+            
+            <div class="config-section execute-section">
+                <h3>OKX Execution</h3>
+                <div class="config-row">
+                    <div class="input-group compact">
+                        <label>Leverage</label>
+                        <select id="exec-leverage">
+                            <option value="5">5x</option>
+                            <option value="10">10x</option>
+                            <option value="15">15x</option>
+                            <option value="20" selected>20x</option>
+                            <option value="30">30x</option>
+                            <option value="40">40x</option>
+                            <option value="50">50x</option>
+                            <option value="75">75x</option>
+                            <option value="100">100x</option>
+                            <option value="125">125x</option>
+                        </select>
+                    </div>
+                    <div class="input-group compact">
+                        <label>Size</label>
+                        <input type="number" id="exec-size" value="1" min="1" step="1">
+                    </div>
+                </div>
+                <small class="hint" id="size-hint">1 Kontrak DOGE = 1000 DOGE</small>
+
+                <div class="exec-info-row">
+                    <div class="exec-info-item glass-card">
+                        <span class="label">Margin</span>
+                        <strong id="margin-est">$0.00</strong>
+                    </div>
+                    <div class="exec-info-item glass-card">
+                        <span class="label" style="color:var(--success)">L: TP/SL</span>
+                        <strong id="long-est" style="font-size:0.85rem">+0.0% / -0.0%</strong>
+                    </div>
+                    <div class="exec-info-item glass-card">
+                        <span class="label" style="color:var(--danger)">S: TP/SL</span>
+                        <strong id="short-est" style="font-size:0.85rem">+0.0% / -0.0%</strong>
+                    </div>
+                </div>
+
+                <div class="action-buttons">
+                    <button id="btn-long" class="btn-success" disabled>LONG</button>
+                    <button id="btn-short" class="btn-danger" disabled>SHORT</button>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content Panel -->
+        <main class="content-area">
+            <header class="topbar">
+                <div class="status-indicator">
+                    <div class="pulse"></div>
+                    <span>System Ready</span>
+                </div>
+            </header>
+
+            <!-- Market Category Tabs -->
+            <div class="market-tabs">
+                <button class="market-tab active" data-market="crypto">
+                    <span class="tab-icon">₿</span> Crypto
+                </button>
+                <button class="market-tab" data-market="forex">
+                    <span class="tab-icon">💱</span> Forex
+                </button>
+                <button class="market-tab" data-market="stocks">
+                    <span class="tab-icon">📈</span> Stocks
+                </button>
+                <button class="market-tab" data-market="index">
+                    <span class="tab-icon">🏛️</span> Index
+                </button>
+            </div>
+
+            <div class="modern-dashboard">
+                <!-- Data Visualizations -->
+                <div class="viz-row">
+                    <!-- Gauge Card -->
+                    <div class="viz-card glass-panel gauge-container">
+                        <h3>AI Conviction</h3>
+                        <div id="conviction-gauge" style="width: 100%; height: 260px;"></div>
+                        <div class="gauge-label" id="action-label">STANDBY</div>
+                    </div>
+                    
+                    <!-- Macro Context Badges -->
+                    <div class="viz-card glass-panel macro-container">
+                        <h3>Macro Context</h3>
+                        <div class="badge-grid">
+                            <div class="macro-badge" id="vix-badge">
+                                <span class="badge-title">VIX Volatility</span>
+                                <span class="badge-value">--</span>
+                            </div>
+                            <div class="macro-badge" id="dxy-badge">
+                                <span class="badge-title">DXY Trend</span>
+                                <span class="badge-value">--</span>
+                            </div>
+                            <div class="macro-badge" id="spx-badge">
+                                <span class="badge-title">SPX Correlation</span>
+                                <span class="badge-value">--</span>
+                            </div>
+                            <div class="macro-badge" id="conflict-badge">
+                                <span class="badge-title">Market Conflict</span>
+                                <span class="badge-value">--</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Setup Details -->
+                <div class="setup-row">
+                    <!-- Market State -->
+                    <div class="viz-card glass-panel" style="grid-column: 1 / -1;">
+                        <h3>Market State</h3>
+                        <div class="setup-grid">
+                            <div class="setup-item">
+                                <span class="label">Current Price</span>
+                                <span class="value" id="summary-price">---</span>
+                            </div>
+                            <div class="setup-item">
+                                <span class="label">Market Bias</span>
+                                <span class="value categorize" id="summary-bias">---</span>
+                            </div>
+                            <div class="setup-item">
+                                <span class="label">Trend / Regime</span>
+                                <span class="value categorize text-sm" id="summary-trend">---</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Long Setup -->
+                    <div class="viz-card glass-panel border-green" id="long-setup-card">
+                        <h3>🟢 Long (Limit)</h3>
+                        <div class="setup-grid">
+                            <div class="setup-item">
+                                <span class="label">Entry Target</span>
+                                <span class="value" id="long-entry">---</span>
+                            </div>
+                            <div class="setup-item">
+                                <span class="label">Stop Loss</span>
+                                <span class="value text-danger" id="long-sl">---</span>
+                            </div>
+                            <div class="setup-item">
+                                <span class="label">Take Profit 1</span>
+                                <span class="value text-success" id="long-tp1">---</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Short Setup -->
+                    <div class="viz-card glass-panel border-red" id="short-setup-card">
+                        <h3>🔴 Short (Limit)</h3>
+                        <div class="setup-grid">
+                            <div class="setup-item">
+                                <span class="label">Entry Target</span>
+                                <span class="value" id="short-entry">---</span>
+                            </div>
+                            <div class="setup-item">
+                                <span class="label">Stop Loss</span>
+                                <span class="value text-danger" id="short-sl">---</span>
+                            </div>
+                            <div class="setup-item">
+                                <span class="label">Take Profit 1</span>
+                                <span class="value text-success" id="short-tp1">---</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Terminal Output -->
+            <div class="terminal-wrapper glass-panel">
+                <div class="terminal-header">
+                    <span>AI Technical Analysis Report</span>
+                </div>
+                <pre id="terminal-output" class="terminal-body">Waiting for analysis run...</pre>
+            </div>
+        </main>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="toast"></div>
+
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>

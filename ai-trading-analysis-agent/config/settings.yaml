@@ -1,0 +1,56 @@
+# Langkah konfigurasi cepat:
+# 1) Isi pair/timeframe/limit/trade_style.
+# 2) (Opsional) isi tv_username/tv_password untuk akses TradingView.
+# 3) Aktifkan OKX: okx.enable: true.
+# 4) Simpan kredensial OKX sebagai env var di PowerShell:
+#    $env:OKX_API_KEY="..."
+#    $env:OKX_API_SECRET="..."
+#    $env:OKX_PASSPHRASE="..."
+# 5) Set ukuran order: okx.order_notional (USDT) atau okx.order_size.
+# 6) Pilih arah eksekusi: okx.submit = preferred | long | short | both.
+#    - Manual override: gunakan submit: long/short untuk memaksa arah walau preferred berbeda.
+# 7) Derivatif: set trade_mode: cross/isolated + inst_id (contoh BTC-USDT-SWAP)
+#    + leverage dan mgn_mode.
+# 8) Spot: trade_mode: cash (leverage diabaikan).
+# 9) Hedge (posSide):
+#    - pos_side: auto -> ikut sinyal yang dikirim
+#    - pos_side: long/short -> paksa sisi posisi
+# 10) SSL error: set okx.ssl_verify: false (hanya troubleshooting, tidak aman).
+
+pair: DOGE/USDT
+timeframe: H4
+limit: 500
+trade_style: swing
+tv_username: ""
+tv_password: ""
+okx:
+  enable: true
+  mode: live
+  api_key: ""
+  api_secret: ""
+  passphrase: ""
+  inst_id: "DOGE-USDT-SWAP"
+  order_size: 1
+  order_notional: 0
+  trade_mode: isolated
+  submit: long
+  pos_side: "auto"
+  leverage: 50
+  auto_leverage: true
+  mgn_mode: "isolated"
+  ssl_verify: true
+  base_url: "https://www.okx.com"
+
+# Modul Analisis Sentimen Berita
+news:
+  enable: true
+  source: "gnews"  # Pilihan: 'gnews', 'cryptopanic'
+  cryptopanic_token: "" # Hanya dipakai bila source 'cryptopanic'
+
+# Rantai Output Penyiaran Alert
+notifications:
+  enable_telegram: true
+  enable_discord: false
+  telegram_token: ""    # Dibiarkan kosong, akan memprioritaskan bacaan dari .env
+  telegram_chat_id: ""  # Dibiarkan kosong, akan memprioritaskan bacaan dari .env
+  discord_webhook: ""   # Dibiarkan kosong, akan memprioritaskan bacaan dari .env
