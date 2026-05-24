@@ -155,7 +155,7 @@ Apabila Anda mau menggunakan versi Antarmuka Pengguna/UI (sangat direkomendasika
 ### 1. Masuk Folder & Aktifkan Lingkungan VENV
 Bukalah terminal `Command Prompt` (CMD) / `PowerShell`. Jalankan skrip inisialisasi:
 ```bash
-cd "d:\Coding\AntiGravity\Prompt Gacor\ai-trading-analysis-agent"
+cd ai-trading-analysis-agent
 .\.venv\Scripts\activate
 ```
 
@@ -381,7 +381,7 @@ Tidak perlu lagi mengetik perintah scanner berulang kali. Modul `scheduler_engin
 
 **Cara menjalankan Auto-Loop:**
 ```bash
-cd "d:\Coding\AntiGravity\Prompt Gacor\ai-trading-analysis-agent"
+cd ai-trading-analysis-agent
 .\.venv\Scripts\activate
 py -3 scheduler_engine/auto_scheduler.py
 ```
