@@ -196,7 +196,7 @@ Berikut pemetaan Flowchart untuk 9-Layer Architecture:
 
 ```mermaid
 flowchart TD
-    CONFIG["⚙️ Settings (yaml)"] --> SCHEDUL()["⏰ Layer 7: Scheduler Engine<br/>Starts Cycle"]
+    CONFIG["⚙️ Settings (yaml)"] --> SCHEDUL(["⏰ Layer 7: Scheduler Engine<br/>Starts Cycle"])
     
     SCHEDUL --> L1["🧠 Layer 1: Data Engine<br/>Fetch OHLCV (TradingView)"]
     SCHEDUL --> L25["📰 Layer 2.5: News Engine<br/>Fetch Sentiment (VADER)"]
