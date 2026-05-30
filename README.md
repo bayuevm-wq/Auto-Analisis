@@ -1,9 +1,9 @@
-# 🤖 AntiGravity: AI Trading Analysis Agent
+# 🤖 AI Trading Analysis Agent
 
 [![Python 3.10+](https://img.shields.io/badge/Python-3.10%2B-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-**AntiGravity AI Trading Analysis Agent** is an advanced artificial intelligence system specifically designed to generate structured technical analysis reports, perform bulk market scanning, and deliver high-probability recommendations (trade setups) based on OHLCV data.
+**AI Trading Analysis Agent** is an advanced artificial intelligence system specifically designed to generate structured technical analysis reports, perform bulk market scanning, and deliver high-probability recommendations (trade setups) based on OHLCV data.
 
 The system is highly flexible and can be used to detect *alpha* (profit opportunities) across various financial markets, including **Crypto (CEX & DEX such as Solana/Base), Forex, Stocks, and Global Indices**.
 
