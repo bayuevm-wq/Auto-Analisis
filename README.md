@@ -3,455 +3,455 @@
 [![Python 3.10+](https://img.shields.io/badge/Python-3.10%2B-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-**AntiGravity AI Trading Analysis Agent** adalah sistem intelijen buatan tingkat lanjut yang dirancang khusus untuk menghasilkan laporan analisis teknikal terstruktur, melakukan pemindaian pasar secara masal (bulk scanning), dan memberikan rekomendasi probabilitas tinggi (setup trading) berdasarkan data OHLCV. 
+**AntiGravity AI Trading Analysis Agent** is an advanced artificial intelligence system specifically designed to generate structured technical analysis reports, perform bulk market scanning, and deliver high-probability recommendations (trade setups) based on OHLCV data.
 
-Sistem ini sangat fleksibel dan dapat digunakan untuk mendeteksi *alpha* (peluang profit) di berbagai pasar finansial, termasuk **Crypto (CEX & DEX seperti Solana/Base), Forex, Saham (Stocks), dan Indeks global**.
-
----
-
-## ✨ Fitur Unggulan
-
-1. **Arsitektur 6-Layer Analisis**:
-   - **Data Engine**: Mengambil data teraktual via sintaks TradingView (`tvdatafeed`).
-   - **Feature Engine**: Ekstraksi fitur teknikal (RSI, MACD, ATR, ROC, dll).
-   - **Regime Detection**: Mengidentifikasi *Market Regime* (Trending, Ranging, Volatile).
-   - **Analysis Engine**: Analisis struktur harga (*Market Structure*), fase Wyckoff, Supply/Demand, Likuiditas, dan *Smart Money Concepts* (SMC/FVG).
-   - **Probability Engine**: Mengkalkulasi metrik probabilitas dengan kesadaran *Timeframe* (TF) dan membobot rasio *Conviction* (Keyakinan: *High, Medium, Low*).
-   - **Report/Execution Engine**: Membuat ringkasan laporan trading komprehensif, setup Entry/TP/SL presisi (mempertimbangkan Consequent Encroachment dari FVG), serta eksekusi otomatis.
-
-2. **Dukungan Multi-Market**: Menjangkau pasar Crypto, Forex, Saham, hingga Indeks.
-3. **Web Dashboard Interaktif**: Monitor status pasar secara *real-time* langsung di peramban (browser) berkat sistem Dashboard komprehensif, menampilkan filter likuiditas, kapitalisasi (FDV), dan tren.
-4. **Modul Eksekusi OKX**: Memungkinkan simulasi dan *Live Trading* melalui API OKX, dilengkapi penyesuaian Manajemen Resiko (*Risk Management*), Leverage, arah order (Long/Short), dan kalkulasi *Initial Margin*.
-5. **Multi-Threaded Bulk Scanner**: Mampu memindai hingga **200 pasang aset** dalam ~5 menit dengan mode ⚡ Fast, dilengkapi rate-limiter cerdas, retry logic, dan global macro caching.
+The system is highly flexible and can be used to detect *alpha* (profit opportunities) across various financial markets, including **Crypto (CEX & DEX such as Solana/Base), Forex, Stocks, and Global Indices**.
 
 ---
 
-## 📁 Struktur Direktori Proyek (Deep Dive)
+## ✨ Key Features
 
-Sistem dibangun berdasarkan arsitektur Modular 6-Layer, di mana masing-masing bagian diletakkan dalam *folder* terpisah sesuai fungsinya (*Separation of Concerns*). Berikut adalah pemetaan detail seluruh berkas internal yang menghidupi kecerdasan buatan ini:
+1. **6-Layer Analysis Architecture**:
+   - **Data Engine**: Fetches the latest data via TradingView syntax (`tvdatafeed`).
+   - **Feature Engine**: Technical feature extraction (RSI, MACD, ATR, ROC, etc.).
+   - **Regime Detection**: Identifies *Market Regime* (Trending, Ranging, Volatile).
+   - **Analysis Engine**: Price structure analysis (*Market Structure*), Wyckoff phases, Supply/Demand, Liquidity, and *Smart Money Concepts* (SMC/FVG).
+   - **Probability Engine**: Calculates probability metrics with *Timeframe* (TF) awareness and weights *Conviction* ratios (Confidence: *High, Medium, Low*).
+   - **Report/Execution Engine**: Generates comprehensive trading summary reports, precise Entry/TP/SL setups (considering FVG Consequent Encroachment), and automated execution.
+
+2. **Multi-Market Support**: Covers Crypto, Forex, Stocks, and Index markets.
+3. **Interactive Web Dashboard**: Monitor market status in *real-time* directly in your browser via a comprehensive Dashboard system, featuring liquidity filters, capitalization (FDV), and trends.
+4. **OKX Execution Module**: Enables simulation and *Live Trading* through the OKX API, complete with Risk Management adjustments, Leverage, order direction (Long/Short), and *Initial Margin* calculation.
+5. **Multi-Threaded Bulk Scanner**: Capable of scanning up to **200 asset pairs** in ~5 minutes with ⚡ Fast mode, equipped with smart rate-limiting, retry logic, and global macro caching.
+
+---
+
+## 📁 Project Directory Structure (Deep Dive)
+
+The system is built on a Modular 6-Layer architecture, where each component is placed in a separate *folder* according to its function (*Separation of Concerns*). Below is a detailed mapping of all internal files powering this AI:
 
 ```text
 ai-trading-analysis-agent/
 │
-├── ⚙️ Skrip Eksekusi Utama
-│   ├── app.py                      # Menjalankan Web Server (UI GUI Dashboard) di localhost.
-│   ├── main.py                     # Skrip CLI murni untuk menghasilkan Log teks per 1 pasang koin.
-│   └── scanner.py                  # Mesin utama Bulk Scanner (Pemindai masal) berkinerja multi-threading.
+├── ⚙️ Main Execution Scripts
+│   ├── app.py                      # Runs the Web Server (UI GUI Dashboard) on localhost.
+│   ├── main.py                     # Pure CLI script to generate text logs for a single pair.
+│   └── scanner.py                  # Main Bulk Scanner engine with multi-threading performance.
 │
-├── ⚙️ Pengaturan Pusat
+├── ⚙️ Central Configuration
 │   └── config/
-│       └── settings.yaml           # Target kontrol Anda (TF, style, Market, API Key OKX, mode simulasi/live).
+│       └── settings.yaml           # Your control target (TF, style, Market, OKX API Key, simulated/live mode).
 │
 ├── 🧠 Layer 1: Data Engine
-│   └── data_engine/                # Modul penarik Data Riil
-│       ├── market_data.py          # Logika formatting dan validasi susunan Candlestick (OHLCV).
-│       └── tradingview_connector.py# Modul jembatan (tvdatafeed) penghubung ke data API TradingView.
+│   └── data_engine/                # Real Data Fetching Module
+│       ├── market_data.py          # Candlestick (OHLCV) formatting and validation logic.
+│       └── tradingview_connector.py# Bridge module (tvdatafeed) connecting to TradingView data API.
 │
 ├── 🧠 Layer 2: Feature Engine
-│   └── feature_engine/             # Mengolah harga mentah menjadi landasan fitur teknikal
-│       ├── feature_extractor.py    # Koordinator pemanggilan ekstraksi semua indikator.
-│       ├── indicator_features.py   # Menghitung MACD, RSI, ATR, ROC, dan Exponential Moving Averages (EMAs).
-│       ├── liquidity_features.py   # Mengukur lonjakan volume, anomali volatilitas, dan deviasi likuiditas.
-│       └── structure_features.py   # Mendeteksi Swing Highs dan Swing Lows (Puncak/Lembah Ayunan).
+│   └── feature_engine/             # Processes raw prices into technical feature foundations
+│       ├── feature_extractor.py    # Coordinator for calling all indicator extractions.
+│       ├── indicator_features.py   # Calculates MACD, RSI, ATR, ROC, and Exponential Moving Averages (EMAs).
+│       ├── liquidity_features.py   # Measures volume spikes, volatility anomalies, and liquidity deviations.
+│       └── structure_features.py   # Detects Swing Highs and Swing Lows.
 │
 ├── 🆕 Layer 2.5: News Engine
-│   └── news_engine/                # Modul Analisis Sentimen Berita Terkini
-│       ├── news_fetcher.py         # Tarik aliran berita dari NewsAPI / CryptoPanic.
-│       ├── sentiment_analyzer.py   # Analisa sentimen teks menggunakan algoritma VADER atau HuggingFace.
-│       └── sentiment_score.py      # Gabungkan metrik skor sentimen berita ke perhitungan di probability_model.py.
+│   └── news_engine/                # Real-Time News Sentiment Analysis Module
+│       ├── news_fetcher.py         # Pulls news feeds from NewsAPI / CryptoPanic.
+│       ├── sentiment_analyzer.py   # Analyzes text sentiment using VADER or HuggingFace algorithms.
+│       └── sentiment_score.py      # Merges news sentiment score metrics into probability_model.py calculations.
 │
 ├── 🧠 Layer 3: Regime Detection
-│   └── market_regime_detection/    # Mengklasifikasikan kepribadian pasar saat ini
-│       ├── regime_classifier.py    # Menentukan status umum secara persentase (Trending vs Choppy vs Volatile).
-│       ├── trend_detector.py       # Memindai kekuatan tren secara absolut mengandalkan Average.
-│       └── volatility_model.py     # Mengukur anomali ledakan volalitas (*Breakout Indicator*).
+│   └── market_regime_detection/    # Classifies the current market personality
+│       ├── regime_classifier.py    # Determines general status by percentage (Trending vs Choppy vs Volatile).
+│       ├── trend_detector.py       # Scans absolute trend strength using Averages.
+│       └── volatility_model.py     # Measures volatility explosion anomalies (*Breakout Indicator*).
 │
 ├── 🧠 Layer 4: Analysis Engine
-│   └── analysis_engine/            # Otak/Inti Logika Analisis Trading yang Paling Mendalam
-│       ├── smc_analysis.py         # Mendeteksi Fair Value Gaps (FVG) dan *Consequent Encroachment* (Titik tengah FVG).
-│       ├── market_structure.py     # Mengakui perpindahan momentum/fraktal (ChoCh) maupun bias terusan (BoS).
-│       ├── liquidity_analysis.py   # Menemukan letak Kolam Uang / Stop loss hunter (Buy-Side/Sell-Side Liquidity).
-│       ├── supply_demand.py        # Memetakan Area Pemesanan Masal / *Order Blocks* (Supply dan Demand).
-│       └── wyckoff_phase.py        # Mengenali Fase Bandar Wyckoff (Akumulasi, Distribusi, Markup, Markdown).
+│   └── analysis_engine/            # Brain/Core of the Deepest Trading Analysis Logic
+│       ├── smc_analysis.py         # Detects Fair Value Gaps (FVG) and *Consequent Encroachment* (FVG midpoint).
+│       ├── market_structure.py     # Identifies momentum/fractal shifts (ChoCh) and continuation bias (BoS).
+│       ├── liquidity_analysis.py   # Locates Liquidity Pools / Stop Loss hunters (Buy-Side/Sell-Side Liquidity).
+│       ├── supply_demand.py        # Maps Bulk Order Areas / *Order Blocks* (Supply and Demand).
+│       └── wyckoff_phase.py        # Recognizes Wyckoff Phases (Accumulation, Distribution, Markup, Markdown).
 │
 ├── 🧠 Layer 5: Probability Model
-│   └── probability_engine/         # Hakim Pengambil Keputusan Terakhir
-│       ├── probability_model.py    # Menyatukan data Layer 1 s/d Layer 4 & membobot probabilitas Multi-Timeframe.
-│       └── scoring_engine.py       # Menghasilkan kalkulasi *Conviction* Akhir (Menaruh label High/Medium/Low Conviction).
+│   └── probability_engine/         # The Final Decision-Making Judge
+│       ├── probability_model.py    # Unifies data from Layer 1 through Layer 4 & weights Multi-Timeframe probabilities.
+│       └── scoring_engine.py       # Produces the final *Conviction* calculation (labels High/Medium/Low Conviction).
 │
 ├── 🧠 Layer 6: Execution & Reporting
-│   ├── report_engine/              # Pusat visualisasi Data Tekstual Console
-│   │   ├── analysis_report.py      # Templat/skema struktur representasi data objek.
-│   │   └── report_formatter.py     # Mencetak *"16-Tahap Analisis Textually"* yang estetik & penuh warna di Konsol Terminal.
+│   ├── report_engine/              # Textual Console Data Visualization Hub
+│   │   ├── analysis_report.py      # Template/schema for data object representation structure.
+│   │   └── report_formatter.py     # Prints the aesthetic & colorful *"16-Stage Textual Analysis"* in the Console Terminal.
 │   │
-│   └── execution_engine/           # (Modul Opsional) Eksekusi robot otomatis OKX
-│       ├── okx_integration.py      # Pengendali *Risk Management*, pendikte batas keamanan Margin, dan kalkulator *Leverage*.
-│       └── okx_client.py           # Eksekutor yang mengirimkan payload sinyal Long/Short langsung dilarikan menuju Web OKX.
+│   └── execution_engine/           # (Optional Module) OKX Automated Robot Execution
+│       ├── okx_integration.py      # *Risk Management* controller, Margin safety limiter, and *Leverage* calculator.
+│       └── okx_client.py           # Executor that sends Long/Short signal payloads directly to OKX Web.
 │
 ├── 🆕 Layer 7: Scheduler Engine
-│   └── scheduler_engine/           # Rutinitas Perulangan (Auto-looping)
-│       ├── auto_scheduler.py       # Memanfaatkan APScheduler — menjalankan scanning setiap X menit secara otomatis.
-│       ├── market_monitor.py       # Memantau dan mendeteksi perubahan sinyal antar waktu running (Run).
-│       └── alert_trigger.py        # Menyaring sinyal spesifik "High Conviction" sebelum memutuskan melempar Notifikasi.
+│   └── scheduler_engine/           # Auto-looping Routine
+│       ├── auto_scheduler.py       # Uses APScheduler — runs scanning every X minutes automatically.
+│       ├── market_monitor.py       # Monitors and detects signal changes between runs.
+│       └── alert_trigger.py        # Filters for specific "High Conviction" signals before deciding to fire notifications.
 │
 ├── 🆕 Layer 8: Notification Engine
-│   └── notification_engine/        # Rantai Output Penyiaran Alert
-│       ├── telegram_notifier.py    # Melempar rangkuman eksekusi sinyal ke akun Telegram Bot khusus Anda.
-│       ├── discord_notifier.py     # Eksekutor opsional: mem-broadcast pesan via Webhook Discord Server.
-│       └── message_formatter.py    # Mengubah format objek mentah teks sinyal agar terlihat rapi, berwama & informatif.
+│   └── notification_engine/        # Alert Broadcasting Output Chain
+│       ├── telegram_notifier.py    # Sends execution signal summaries to your dedicated Telegram Bot account.
+│       ├── discord_notifier.py     # Optional executor: broadcasts messages via Discord Server Webhook.
+│       └── message_formatter.py    # Reformats raw signal text objects to look clean, colorful & informative.
 │
 ├── 🆕 Layer 9: State Engine
-│   └── state_engine/               # Anti-Spam Signal & Sistem Memori Riwayat
-│       ├── signal_cache.py         # Menyimpan status sinyal historis terakhir yang tercapai (menggunakan SQLite / Redis).
-│       └── dedup_filter.py         # Mengeblok perulangan alert kembar (duplikat) / mencegah spam notifikasi konstan.
+│   └── state_engine/               # Anti-Spam Signal & History Memory System
+│       ├── signal_cache.py         # Stores the latest historical signal status (using SQLite / Redis).
+│       └── dedup_filter.py         # Blocks duplicate alert repetitions / prevents constant notification spam.
 │
-├── 🧪 Backtesting & Simulator (Opsional)
-│   └── backtesting_engine/         # Alat pengujian simulasi masa lalu
-│       ├── backtest_runner.py      # Siklus iterasi algoritma tes.
-│       ├── strategy_simulator.py   # Pengubah sinyal teks menjadi format entri eksekusi simulasi dompet kosong.
-│       └── performance_metrics.py  # Kalkulator Metrik keberhasilan (% Win-Rate, *Drawdown*, Profit & Loss).
+├── 🧪 Backtesting & Simulator (Optional)
+│   └── backtesting_engine/         # Historical simulation testing tools
+│       ├── backtest_runner.py      # Algorithm test iteration cycle.
+│       ├── strategy_simulator.py   # Converts text signals to simulated empty wallet execution entries.
+│       └── performance_metrics.py  # Success metric calculator (% Win-Rate, *Drawdown*, Profit & Loss).
 │
-└── 🌐 Modul Web Dashboard UI
+└── 🌐 Web Dashboard UI Module
     ├── static/                     
-    │   ├── css/style.css           # Berkas desain (*Styling*) keindahan UI aplikasi web Anda.
-    │   └── js/app.js               # Logika jembatan *Front-end*, bertindak menarik JSON dari scanner ke layar website.
+    │   ├── css/style.css           # UI web application styling (*Styling*) file.
+    │   └── js/app.js               # *Front-end* bridge logic, pulling JSON from the scanner to the website display.
     │
     └── templates/                  
-        └── index.html              # *Blueprint Main Layout* / Rangkaian struktur dasar Tabel Market pemindai Anda.
+        └── index.html              # *Blueprint Main Layout* / Core structure of your Scanner Market Table.
 ```
 
 ---
 
-## 💻 Prasyarat Sistem
+## 💻 System Prerequisites
 
-Sebelum mulai menjalankan sistem ini, pastikan spesifikasi perangkat Anda memenuhi kriteria berikut:
-*   **Python:** Versi 3.10 atau yang lebih baru.
-*   **Konektivitas Internet Stabil:** Digunakan untuk *scraping* data *real-time* dan koneksi TradingView/API.
-*   (Opsional) Kredensial akun **TradingView** untuk mencegah _rate-limit_ akibat penggunaan sesi _anonymous_.
+Before running this system, ensure your device meets the following requirements:
+*   **Python:** Version 3.10 or later.
+*   **Stable Internet Connection:** Used for *real-time* data scraping and TradingView/API connections.
+*   (Optional) **TradingView** account credentials to prevent _rate-limiting_ from anonymous session usage.
 
 ---
 
-## 🛠 Instalasi
+## 🛠 Installation
 
-Unduh atau cloning repositori ini, kemudian bangun *Virtual Environment* untuk memastikan tatanan arsitektur Pustaka Python (_library_) terjaga kebersihannya:
+Download or clone this repository, then set up a *Virtual Environment* to keep your Python library architecture clean:
 
 ```bash
-# 1. Buat virtual environment (satu kali saja)
+# 1. Create virtual environment (one-time only)
 py -3 -m venv .venv
 
-# 2. Aktifkan virtual environment (Windows)
+# 2. Activate virtual environment (Windows)
 .\.venv\Scripts\activate
 
-# 3. Instal semua dependencies yang diperlukan
+# 3. Install all required dependencies
 py -3 -m pip install -r requirements.txt
 ```
 
 ---
 
-## 🚀 Cara Penggunaan Sehari-hari (Menggunakan Web Dashboard)
+## 🚀 Daily Usage (Using the Web Dashboard)
 
-Apabila Anda mau menggunakan versi Antarmuka Pengguna/UI (sangat direkomendasikan untuk visibilitas data massal), ikuti 3 langkah berikut setiap kali membuka komputer:
+If you want to use the User Interface/UI version (highly recommended for bulk data visibility), follow these 3 steps every time you start your computer:
 
-### 1. Masuk Folder & Aktifkan Lingkungan VENV
-Bukalah terminal `Command Prompt` (CMD) / `PowerShell`. Jalankan skrip inisialisasi:
+### 1. Navigate to Folder & Activate VENV Environment
+Open a `Command Prompt` (CMD) / `PowerShell` terminal. Run the initialization script:
 ```bash
 cd ai-trading-analysis-agent
 .\.venv\Scripts\activate
 ```
 
-### 2. Jalankan Modul Scanner Pasar dan Server Web Lokal
-Anda harus menjalankan server utamanya, sembari memanggil modul pemindai (bisa disesuaikan spesifik kategori pasarnya):
+### 2. Run the Market Scanner Module and Local Web Server
+You need to run the main server while calling the scanner module (you can specify specific market categories):
 ```bash
-# A. Jalankan Server Web Pusat
+# A. Run the Central Web Server
 py -3 app.py
 
-# B. (Buka Jendela Terminal BARU) -> aktifkan .venv -> lalu jalankan scanner:
-# ⚡ Fast scan (default) - 200 crypto pairs dalam ~5 menit
+# B. (Open a NEW Terminal Window) -> activate .venv -> then run scanner:
+# ⚡ Fast scan (default) - 200 crypto pairs in ~5 minutes
 py -3 scanner.py --market crypto --timeframe 1h --style swing
 
-# 🔍 Full analysis (lebih lambat, tapi include HTF trend, news, correlation)
+# 🔍 Full analysis (slower, but includes HTF trend, news, correlation)
 py -3 scanner.py --market crypto --timeframe 1h --style swing --full
 ```
 
-*Tips:* Anda dapat mengatur jumlah thread dan memilih market spesifik:
+*Tips:* You can configure the number of threads and choose specific markets:
 ```bash
-# Crypto 200 pairs, 8 threads (rekomendasi aman)
+# Crypto 200 pairs, 8 threads (safe recommendation)
 py -3 scanner.py --market crypto --timeframe 1h --style swing --threads 8
 
-# Forex, Saham, Index
+# Forex, Stocks, Indexes
 py -3 scanner.py --market forex --timeframe 1h --style swing
 py -3 scanner.py --market stocks --timeframe 1d --style swing
 py -3 scanner.py --market indexes --timeframe 1d --style swing
 
-# Semua pasar sekaligus (crypto + forex + stocks + indexes)
+# All markets at once (crypto + forex + stocks + indexes)
 py -3 scanner.py --market all --timeframe 1h --style swing
 ```
 
-### 3. Pantau Dashboard Pemindai via Browser 🌐
-Biarkan kedua Terminal hitam tadi **tetap nyala dan jangan dikesempingkan (di-close)**. Buka Google Chrome atau Microsoft Edge untuk mengakses antarmuka Anda di:
+### 3. Monitor the Scanner Dashboard via Browser 🌐
+Keep both Terminal windows **running and do not close them**. Open Google Chrome or Microsoft Edge to access your interface at:
 👉 **[http://localhost:5000](http://localhost:5000)**
 
 ---
 
-## ⚙️ Cara Menjalankan Versi Teks Murni (Bagi Programmer/Trader Log)
+## ⚙️ Running the Pure Text Version (For Programmers/Trader Logs)
 
-Jika Anda ingin melihat rincian kalkulasi data struktural tiap langkah per langkah dalam format *Log Analysis* konvensional, panggil skrip utama `main.py` menggunakan argumen `--pair`:
+If you want to see detailed structural data calculations step by step in a conventional *Log Analysis* format, call the main `main.py` script using the `--pair` argument:
 
 ```bash
 py -3 main.py --pair BINANCE:BTCUSDT --timeframe 1h --limit 500
 ```
-(Akan memberikan respons berupa rincian lengkap hingga pencetakan *Setup Signal* probabilitasnya).
+(This will provide a detailed response including the probability *Setup Signal* output.)
 
 ---
 
-## 📝 Konfigurasi Inti (`config/settings.yaml`)
+## 📝 Core Configuration (`config/settings.yaml`)
 
-Edit _file_ utama konfigurasinya (berada di `config/settings.yaml`) untuk menyesuaikan metode trading default *Agent* Anda:
+Edit the main configuration file (located at `config/settings.yaml`) to customize your *Agent's* default trading method:
 ```yaml
-pair: BTC/USDT           # Pasangan Dasar
-timeframe: H4            # TF Dasar Evaluasi
-limit: 500               # Indeks Lilin Maksimal 
-trade_style: swing       # Opsi Style: scalping, intraday, swing, position
-# -- Konfigurasi Proteksi Limit TradingView --
-tv_username: ""          # Disarankan log-in
+pair: BTC/USDT           # Base Pair
+timeframe: H4            # Base Evaluation TF
+limit: 500               # Maximum Candle Index 
+trade_style: swing       # Style Options: scalping, intraday, swing, position
+# -- TradingView Rate-Limit Protection Configuration --
+tv_username: ""          # Login recommended
 tv_password: ""          
 ```
 
 ---
 
-## 📊 Pair / Symbol Format yang Didukung Penuh
+## 📊 Fully Supported Pair / Symbol Formats
 
-Dapur pacu mesin membaca API _Ticker_ persis sebagaimana format penamaan grafik dalam **TradingView**. 
+The engine reads API *Ticker* data exactly as named in **TradingView** chart format.
 
-### Format Wajib (Eksplisit/Direkomendasikan):
-Gunakan sintaks `NAMA_BURSA:NAMA_SYMBOL` untuk menghilangkan ketidaktepatan data likuiditas harga.
+### Required Format (Explicit/Recommended):
+Use the `EXCHANGE_NAME:SYMBOL_NAME` syntax to eliminate price liquidity data inaccuracies.
 
-*   **Sektor Crypto:** `BINANCE:BTCUSDT`, `BYBIT:ETHUSDT`, `OKX:SOLUSDT`, `KUCOIN:KASUSDT`
-*   **Sektor Saham (Stocks):** `NASDAQ:AAPL`, `NASDAQ:MSFT`, `NYSE:TSLA`, `NYSE:NVDA`
-*   **Sektor Valuta Asing (Forex):** `FX_IDC:EURUSD`, `FX_IDC:GBPUSD`, `OANDA:USDJPY`, `OANDA:USDCAD`
-*   **Sektor Bursa Index:** `SP:SPX`, `NASDAQ:NDX`, `TVC:DXY` (Index Dollar)
+*   **Crypto Sector:** `BINANCE:BTCUSDT`, `BYBIT:ETHUSDT`, `OKX:SOLUSDT`, `KUCOIN:KASUSDT`
+*   **Stocks Sector:** `NASDAQ:AAPL`, `NASDAQ:MSFT`, `NYSE:TSLA`, `NYSE:NVDA`
+*   **Forex Sector:** `FX_IDC:EURUSD`, `FX_IDC:GBPUSD`, `OANDA:USDJPY`, `OANDA:USDCAD`
+*   **Index Sector:** `SP:SPX`, `NASDAQ:NDX`, `TVC:DXY` (Dollar Index)
 
-### Rentang Waktu (Timeframes Supported):
+### Supported Timeframes:
 *   **Intraday Trading:** `1m`, `3m`, `5m`, `15m`, `30m`
-*   **Swing / Makro Trading:** `1h`, `2h`, `3h`, `4h`, `1d`, `1w`, `1mo`
+*   **Swing / Macro Trading:** `1h`, `2h`, `3h`, `4h`, `1d`, `1w`, `1mo`
 
 ---
 
-## 🔐 Integrasi Eksekusi ke OKX Exchange (Advanced Setup)
+## 🔐 OKX Exchange Execution Integration (Advanced Setup)
 
-Agent ini dirancang siap menyambungkan hasil analisis probabilitas menembus dompet dan eksekusi pada Bursa Centralized (**OKX**).
-**Pertama**, simpan kunci akses (API) OKX Anda dalam sesi *Environment (ENV)* *Terminal*/Komp Anda berulang secara rahasia:
+This Agent is designed to connect probability analysis results directly to wallet execution on the centralized exchange (**OKX**).
+**First**, store your OKX access keys (API) in your *Terminal/Computer's Environment (ENV)* session securely:
 ```powershell
 $env:OKX_API_KEY="..."
 $env:OKX_API_SECRET="..."
 $env:OKX_PASSPHRASE="..."
 ```
 
-### A. Mengatur Eksekusi Pasar Spot (Fisik)
-Pastikan target pair-nya mengikut *Cash* tanpa kata "SWAP", nilai order _Size_ adalah `0`:
+### A. Setting Up Spot Market Execution (Physical)
+Ensure the target pair follows *Cash* without the "SWAP" suffix, and the order _Size_ value is `0`:
 ```yaml
 okx:
   enable: true
-  mode: simulated       # Gunakan 'live' sewaktu ingin pakai dana riil
-  inst_id: "BTC-USDT"   # HANYA BASE-QUOTE PAIR (TANPA SWAP)
+  mode: simulated       # Use 'live' when you want to use real funds
+  inst_id: "BTC-USDT"   # BASE-QUOTE PAIR ONLY (WITHOUT SWAP)
   trade_mode: cash 
-  order_notional: 10    # MEMBELI senilai 10 USDT
-  order_size: 0         # <- Wajib '0' jika notional digunakan
-  leverage: 0           # Leverage dibiarkan 0 (tidak valid di Spot)
+  order_notional: 10    # BUY worth 10 USDT
+  order_size: 0         # <- Must be '0' when notional is used
+  leverage: 0           # Leverage left at 0 (not valid for Spot)
 ```
 
-### B. Mengatur Eksekusi Pasar Futures/Derivatif (SWAP)
-Gunakan wajib opsi `order_size` (Nilai Lot Kontrak) dengan akhiran _SWAP_ di instumennya:
+### B. Setting Up Futures/Derivatives Market Execution (SWAP)
+You must use the `order_size` option (Contract Lot Value) with the _SWAP_ suffix on the instrument:
 ```yaml
 okx:
   enable: true
   mode: simulated
-  inst_id: "BTC-USDT-SWAP" # WAJIB TULIS SWAP UNTUK FUTURES
+  inst_id: "BTC-USDT-SWAP" # SWAP IS MANDATORY FOR FUTURES
   trade_mode: isolated
   mgn_mode: isolated
-  leverage: 5              # Atur tuas Margin Anda (contoh 5x)
-  order_size: 1            # Berapa buah lot kontraknya? (Angka Bulat: 1, 2, dll)
-  order_notional: 0        # <- WAJIB '0'
-  pos_side: auto           # AI yang tentukan nge-Long atau nge-Short
+  leverage: 5              # Set your Margin lever (e.g., 5x)
+  order_size: 1            # How many contract lots? (Whole numbers: 1, 2, etc.)
+  order_notional: 0        # <- MUST BE '0'
+  pos_side: auto           # AI determines whether to go Long or Short
   submit: preferred
 ```
 
-### C. Penting! Menghargai Margin OKX Futures
-_1 Kontrak di OKX (saat mengatur order_size = 1) BUKAN berarti 1 keping full koinnya. Tiap koin nilai kontraknya diregulasi secara berbeda-beda._
+### C. Important! Understanding OKX Futures Margin
+_1 Contract on OKX (when setting order_size = 1) does NOT mean 1 full coin. Each coin's contract value is regulated differently._
 
-*   **BTC-USDT-SWAP** : 1 Kontrak = `0.01 BTC` (sekitar $900 s/d $1000an)
-*   **ETH-USDT-SWAP** : 1 Kontrak = `0.1 ETH` (kisaran $300 USDT)
-*   **SOL-USDT-SWAP** : 1 Kontrak = `1 SOL` (kisaran $150 s/d $180)
-*   **DOGE-USDT-SWAP**: 1 Kontrak = `1000 DOGE` (sekitar $15 hingga $150)
+*   **BTC-USDT-SWAP** : 1 Contract = `0.01 BTC` (approximately $900 to $1000)
+*   **ETH-USDT-SWAP** : 1 Contract = `0.1 ETH` (approximately $300 USDT)
+*   **SOL-USDT-SWAP** : 1 Contract = `1 SOL` (approximately $150 to $180)
+*   **DOGE-USDT-SWAP**: 1 Contract = `1000 DOGE` (approximately $15 to $150)
 
-> **Contoh Kalkulasi Nyata (DOGE-USDT-SWAP)**:
-> - **Harga saat ini**: $0.093
-> - **Nilai Asli (Notional)** untuk 1 Kontrak (1000 DOGE): $0.093 * 1000 = **$93.00**
-> - **Kewajiban Uang Modal/Tahapan (Margin)** jika leverage **20x**: `$93.00 / 20 = $4.65`
+> **Real Calculation Example (DOGE-USDT-SWAP)**:
+> - **Current price**: $0.093
+> - **Notional Value** for 1 Contract (1000 DOGE): $0.093 * 1000 = **$93.00**
+> - **Required Margin** at **20x** leverage: `$93.00 / 20 = $4.65`
 > 
-> *Artinya saldo dompet Futures Anda cuman dipotong `$4.65` saja demi menahan posisi senilai `1000 DOGE`. Namun perhatikan Likuidasinya.*
+> *This means your Futures wallet balance is only debited `$4.65` to hold a position worth `1000 DOGE`. However, pay attention to the liquidation price.*
 
-### D. Troubleshooting SSL OKX
-Jika muncul error seperti `CERTIFICATE_VERIFY_FAILED`:
-1. Sesuaikan sinkronisasi **Jam Komputer Windows Anda** ke Zona waktu internasional secara _Update Now_.
-2. Jika berlanjut, pada config rubah parameter `ssl_verify: false` (Peringatan: kurang aman dari segi security).
+### D. OKX SSL Troubleshooting
+If you encounter an error like `CERTIFICATE_VERIFY_FAILED`:
+1. Synchronize your **Windows Computer Clock** to the international timezone via _Update Now_.
+2. If the issue persists, change the parameter `ssl_verify: false` in the config (Warning: less secure).
 
 ---
 
 ## ⚡ Scanner Performance Tuning
 
-Scanner telah dioptimasi untuk memindai **200 pasang crypto** (dari CoinMarketCap top market cap) dengan kecepatan tinggi. Daftar pair disimpan di `ctval.txt`.
+The scanner has been optimized to scan **200 crypto pairs** (from CoinMarketCap top market cap) at high speed. The pair list is stored in `ctval.txt`.
 
-### Mode Scan
+### Scan Modes
 
-| Mode | Flag | Fitur | Estimasi 200 pairs |
-|------|------|-------|--------------------|
-| **⚡ Fast** (default) | `--fast` | Skip HTF trend, news, per-pair correlation | **~3-5 menit** |
-| **🔍 Full** | `--full` | Include semua: HTF, news sentiment, BTC-DXY/SPX correlation | **~15-20 menit** |
+| Mode | Flag | Features | Estimate for 200 pairs |
+|------|------|----------|------------------------|
+| **⚡ Fast** (default) | `--fast` | Skips HTF trend, news, per-pair correlation | **~3-5 minutes** |
+| **🔍 Full** | `--full` | Includes everything: HTF, news sentiment, BTC-DXY/SPX correlation | **~15-20 minutes** |
 
-### Parameter Scanner
+### Scanner Parameters
 
-| Flag | Pilihan | Default | Keterangan |
-|------|---------|---------|------------|
-| `--market` | `crypto`, `forex`, `stocks`, `indexes`, `all` | `crypto` | Pasar target |
-| `--timeframe` | `1m`-`1mo` | `1h` | Timeframe analisis |
-| `--style` | `scalping`, `intraday`, `swing` | `swing` | Gaya trading |
-| `--threads` | `1`-`15` | `10` | Jumlah thread paralel |
-| `--fast` | - | `on` | Mode cepat (default aktif) |
-| `--full` | - | `off` | Mode analisis lengkap |
+| Flag | Options | Default | Description |
+|------|---------|---------|-------------|
+| `--market` | `crypto`, `forex`, `stocks`, `indexes`, `all` | `crypto` | Target market |
+| `--timeframe` | `1m`-`1mo` | `1h` | Analysis timeframe |
+| `--style` | `scalping`, `intraday`, `swing` | `swing` | Trading style |
+| `--threads` | `1`-`15` | `10` | Number of parallel threads |
+| `--fast` | - | `on` | Fast mode (default active) |
+| `--full` | - | `off` | Full analysis mode |
 
-### Rekomendasi Thread
+### Thread Recommendations
 
-| Threads | Kecepatan | Risiko Rate-Limit |
-|---------|-----------|-------------------|
-| `5-8` | ~0.5-0.8 pairs/sec | ✅ Sangat aman |
-| `10` | ~1.0-1.5 pairs/sec | ✅ Aman (default) |
-| `12-15` | ~1.5-2.0 pairs/sec | ⚠️ Sesekali 429 error |
+| Threads | Speed | Rate-Limit Risk |
+|---------|-------|-----------------|
+| `5-8` | ~0.5-0.8 pairs/sec | ✅ Very safe |
+| `10` | ~1.0-1.5 pairs/sec | ✅ Safe (default) |
+| `12-15` | ~1.5-2.0 pairs/sec | ⚠️ Occasional 429 errors |
 
-### Arsitektur Anti Rate-Limit
+### Anti Rate-Limit Architecture
 
-Scanner menggunakan beberapa mekanisme untuk mencegah pemblokiran dari TradingView:
+The scanner uses several mechanisms to prevent blocking from TradingView:
 
-1. **Global Rate Limiter** (`tradingview_connector.py`): Jeda minimum 150ms antar setiap request API, berlaku untuk semua thread.
-2. **Global Macro Cache** (`main.py`): Data DXY/VIX/SPX di-cache 5 menit — tidak perlu di-fetch ulang per pair (menghemat ~300 API call).
-3. **Retry with Backoff** (`market_data.py`): 2x retry per exchange dengan jeda eksponensial.
+1. **Global Rate Limiter** (`tradingview_connector.py`): Minimum 150ms delay between each API request, applies to all threads.
+2. **Global Macro Cache** (`main.py`): DXY/VIX/SPX data cached for 5 minutes — no need to re-fetch per pair (saves ~300 API calls).
+3. **Retry with Backoff** (`market_data.py`): 2x retry per exchange with exponential delay.
 4. **Exchange Fallback Chain**: BINANCE → OKX → BYBIT → MEXC → GATEIO → KuCoin.
-5. **News Cache** (`news_fetcher.py`): Hasil berita di-cache 15 menit.
-6. **OHLCV Data Cache**: Cache 5 menit per pair/timeframe di `tradingview_connector.py`.
-7. **Thread-Safe Singleton**: Instance TvDatafeed tunggal, dilindungi lock, digunakan semua thread.
+5. **News Cache** (`news_fetcher.py`): News results cached for 15 minutes.
+6. **OHLCV Data Cache**: 5-minute cache per pair/timeframe in `tradingview_connector.py`.
+7. **Thread-Safe Singleton**: Single TvDatafeed instance, lock-protected, shared across all threads.
 
-### Daftar 200 Pair (`ctval.txt`)
+### 200 Pair List (`ctval.txt`)
 
-Daftar pair diambil dari **CoinGecko/CoinMarketCap top market cap**, dengan pengecualian:
-- ❌ Stablecoins (USDT, USDC, DAI, USDE, USDD, dll)
+The pair list is sourced from **CoinGecko/CoinMarketCap top market cap**, with the following exclusions:
+- ❌ Stablecoins (USDT, USDC, DAI, USDE, USDD, etc.)
 - ❌ Gold/Silver tokens (XAUT, PAXG, KAU, KAG)
-- ❌ Institutional/Treasury tokens (BUIDL, JTRSY, OUSG, dll)
-- ❌ Non-tradeable tokens (Figure HELOC, Canton, dll)
+- ❌ Institutional/Treasury tokens (BUIDL, JTRSY, OUSG, etc.)
+- ❌ Non-tradeable tokens (Figure HELOC, Canton, etc.)
 
-Untuk memperbarui daftar, edit file `ctval.txt` dengan format: `SYMBOL-USDT-SWAP:BINANCE`
+To update the list, edit the `ctval.txt` file with format: `SYMBOL-USDT-SWAP:BINANCE`
 
 ---
 
 ## 📰 Layer 2.5: News Sentiment Engine (NLP)
 
-Robot sekarang tidak hanya membaca *Candlestick* — ia juga membaca **berita**. Modul `news_engine/` menarik *headline* terkini secara otomatis lewat pustaka `gnews` (tanpa API key), menganalisa sentimen teks kalimat menggunakan algoritma **VADER NLP**, dan menginjeksikan hasilnya ke dalam perhitungan skor probabilitas (`probability_model.py`).
+The robot now doesn't just read *Candlesticks* — it also reads **news**. The `news_engine/` module pulls the latest *headlines* automatically via the `gnews` library (no API key required), analyzes text sentiment using the **VADER NLP** algorithm, and injects the results into the probability score calculation (`probability_model.py`).
 
-> **Catatan:** Pada mode `--fast` (default scanner), news sentiment di-skip untuk kecepatan. Gunakan `--full` atau `main.py` untuk analisis lengkap termasuk berita.
+> **Note:** In `--fast` mode (default scanner), news sentiment is skipped for speed. Use `--full` or `main.py` for complete analysis including news.
 
-**Cara kerjanya:**
-1. Saat `main.py` atau `scanner.py --full` memproses sebuah pair, sistem memanggil `news_engine.sentiment_score.get_asset_sentiment()`.
-2. `gnews` menarik 5 headline terbaru terkait aset tersebut.
-3. `vaderSentiment` menghitung skor compound `[-1.0, +1.0]` per headline, lalu diambil rata-ratanya.
-4. Skor ini mempengaruhi Conviction akhir hingga **±15%** pada model probabilitas.
-5. Sistem memiliki *cache* internal 15 menit untuk mencegah pemanggilan berlebihan ke `gnews`.
+**How it works:**
+1. When `main.py` or `scanner.py --full` processes a pair, the system calls `news_engine.sentiment_score.get_asset_sentiment()`.
+2. `gnews` pulls the 5 latest headlines related to the asset.
+3. `vaderSentiment` calculates a compound score `[-1.0, +1.0]` per headline, then averages them.
+4. This score influences the final Conviction by up to **±15%** in the probability model.
+5. The system has an internal *cache* of 15 minutes to prevent excessive calls to `gnews`.
 
-**Konfigurasi (`config/settings.yaml`):**
+**Configuration (`config/settings.yaml`):**
 ```yaml
 news:
   enable: true
-  source: "gnews"          # Gratis, tanpa token
-  cryptopanic_token: ""    # Opsional untuk pengembangan masa depan
+  source: "gnews"          # Free, no token required
+  cryptopanic_token: ""    # Optional for future development
 ```
 
 ---
 
-## ⏰ Layer 7: Auto Scheduler Engine (Loop Otomatis)
+## ⏰ Layer 7: Auto Scheduler Engine (Automatic Loop)
 
-Tidak perlu lagi mengetik perintah scanner berulang kali. Modul `scheduler_engine/` memungkinkan robot berjalan terus-menerus secara otomatis, melakukan scanning berkala, dan *hanya* mengirim notifikasi saat ditemukan sinyal berkeyakinan tinggi.
+No more typing scanner commands repeatedly. The `scheduler_engine/` module allows the robot to run continuously and automatically, performing periodic scanning, and *only* sending notifications when high-conviction signals are found.
 
-**Cara menjalankan Auto-Loop:**
+**How to run Auto-Loop:**
 ```bash
 cd ai-trading-analysis-agent
 .\.venv\Scripts\activate
 py -3 scheduler_engine/auto_scheduler.py
 ```
 
-**Argumen yang didukung:**
+**Supported arguments:**
 
-| Flag | Pilihan | Default | Keterangan |
+| Flag | Options | Default | Description |
 |---|---|---|---|
-| `--market` | `crypto`, `forex`, `stocks`, `indexes`, `all` | `crypto` | Pasar target pemindai |
-| `--timeframe` | `5m`, `15m`, `1h`, `4h`, `1d`, dll | `1h` | Timeframe analisis |
-| `--style` | `scalping`, `intraday`, `swing` | `swing` | Gaya trading |
-| `--interval` | angka (menit) | `60` | Jeda perulangan otomatis |
+| `--market` | `crypto`, `forex`, `stocks`, `indexes`, `all` | `crypto` | Target scanner market |
+| `--timeframe` | `5m`, `15m`, `1h`, `4h`, `1d`, etc. | `1h` | Analysis timeframe |
+| `--style` | `scalping`, `intraday`, `swing` | `swing` | Trading style |
+| `--interval` | number (minutes) | `60` | Automatic loop interval |
 
-**Contoh penggunaan fleksibel:**
+**Flexible usage examples:**
 ```bash
-# Default: Crypto 1H Swing, diulang setiap 60 menit
+# Default: Crypto 1H Swing, repeats every 60 minutes
 py -3 scheduler_engine/auto_scheduler.py
 
-# Crypto 15M Scalping, diulang setiap 15 menit
+# Crypto 15M Scalping, repeats every 15 minutes
 py -3 scheduler_engine/auto_scheduler.py --timeframe 15m --style scalping --interval 15
 
-# Forex 4H Swing, diulang setiap 4 jam
+# Forex 4H Swing, repeats every 4 hours
 py -3 scheduler_engine/auto_scheduler.py --market forex --timeframe 4h --style swing --interval 240
 
-# Semua pasar sekaligus, 1H, diulang setiap 1 jam
+# All markets at once, 1H, repeats every 1 hour
 py -3 scheduler_engine/auto_scheduler.py --market all --timeframe 1h --interval 60
 ```
 
-**Perilaku:**
-- Saat pertama kali dijalankan, otomatis melakukan *bootstrap scan* sekali tanpa menunggu interval.
-- Setelah bootstrap selesai, sistem akan mengulangi scanning setiap `--interval` menit secara terus-menerus.
-- Hanya sinyal **High Conviction (>70%)** yang diteruskan ke rantai notifikasi.
+**Behavior:**
+- On first run, it automatically performs a *bootstrap scan* once without waiting for the interval.
+- After bootstrap completes, the system repeats scanning every `--interval` minutes continuously.
+- Only **High Conviction (>70%)** signals are forwarded to the notification chain.
 
-**Alur rantai eksekusi scheduler:**
+**Scheduler execution chain flow:**
 ```
-auto_scheduler.py (APScheduler tiap X menit)
-  └─→ market_monitor.py (Scan semua pair, bangun report)
-       └─→ alert_trigger.py (Filter: hanya Conviction > 70%)
-            └─→ state_engine/dedup_filter.py (Cek: sudah pernah dikirim?)
-                 └─→ notification_engine/ (Kirim ke Telegram/Discord!)
+auto_scheduler.py (APScheduler every X minutes)
+  └─→ market_monitor.py (Scan all pairs, build report)
+       └─→ alert_trigger.py (Filter: only Conviction > 70%)
+            └─→ state_engine/dedup_filter.py (Check: already sent?)
+                 └─→ notification_engine/ (Send to Telegram/Discord!)
 ```
 
 ---
 
 ## 🔔 Layer 8: Notification Engine (Telegram & Discord)
 
-Sinyal *High Conviction* dikirim langsung ke HP Anda tanpa perlu memantau dashboard.
+*High Conviction* signals are sent directly to your phone without needing to monitor the dashboard.
 
-**Penyimpanan Kredensial (Model Hybrid):**
-- **Config umum** → `config/settings.yaml` (mengaktifkan/menonaktifkan platform)
-- **Token rahasia** → file `.env` di root folder (TIDAK ikut terunggah ke Git)
+**Credential Storage (Hybrid Model):**
+- **General config** → `config/settings.yaml` (enables/disables platforms)
+- **Secret tokens** → `.env` file in the root folder (NOT uploaded to Git)
 
-**Langkah 1: Buat file `.env` di root folder**
+**Step 1: Create a `.env` file in the root folder**
 ```env
 TELEGRAM_BOT_TOKEN="1234567890:ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 TELEGRAM_CHAT_ID="12345678"
 DISCORD_WEBHOOK_URL="https://discord.com/api/webhooks/xxx/yyy"
 ```
-> **Cara mendapatkan token Telegram:**
-> 1. Buka Telegram, cari `@BotFather` → ketik `/newbot` → ikuti instruksi → catat Token.
-> 2. Kirim pesan apapun ke bot baru Anda, lalu buka `https://api.telegram.org/bot<TOKEN>/getUpdates` di browser untuk mendapatkan `chat_id`.
+> **How to get a Telegram token:**
+> 1. Open Telegram, search for `@BotFather` → type `/newbot` → follow instructions → note down the Token.
+> 2. Send any message to your new bot, then open `https://api.telegram.org/bot<TOKEN>/getUpdates` in your browser to get the `chat_id`.
 
-**Langkah 2: Aktifkan di config**
+**Step 2: Enable in config**
 ```yaml
 notifications:
   enable_telegram: true
-  enable_discord: false       # Set 'true' jika ingin pakai Discord juga
+  enable_discord: false       # Set 'true' if you want to use Discord too
 ```
 
-**Format pesan yang dikirim:**
+**Message format sent:**
 ```
 🟢 **AI Trading Alert: DOGE/USDT**
 **Direction:** LONG
@@ -467,52 +467,52 @@ notifications:
 
 ---
 
-## 🛡 Layer 9: State Engine (Anti-Spam & Memori)
+## 🛡 Layer 9: State Engine (Anti-Spam & Memory)
 
-Tanpa modul ini, robot yang berjalan di loop 15 menit akan mengirim notifikasi **identik** berulang kali. `state_engine/` mencegah hal tersebut:
+Without this module, a robot running on a 15-minute loop would send **identical** notifications repeatedly. `state_engine/` prevents this:
 
-- **`signal_cache.py`**: Menyimpan riwayat sinyal terakhir dalam file `state_engine/signal_cache.json` (otomatis dibuat).
-- **`dedup_filter.py`**: Mengecek apakah sinyal yang sama (`PAIR + TIMEFRAME + ACTION`) sudah pernah dikirim dalam **120 menit** terakhir.
-- Sinyal bertipe `NO TRADE`, `RISK OFF`, atau `RECALIBRATING` **selalu difilter** dan tidak pernah dikirim.
+- **`signal_cache.py`**: Stores the latest signal history in `state_engine/signal_cache.json` (automatically created).
+- **`dedup_filter.py`**: Checks whether the same signal (`PAIR + TIMEFRAME + ACTION`) has already been sent within the last **120 minutes**.
+- Signals of type `NO TRADE`, `RISK OFF`, or `RECALIBRATING` are **always filtered** and never sent.
 
-**Perilaku:**
-| Kondisi | Hasil |
+**Behavior:**
+| Condition | Result |
 |---|---|
-| DOGE LONG dikirim 30 menit lalu | ❌ Diblokir (cooldown 120 menit) |
-| DOGE LONG dikirim 3 jam lalu | ✅ Dikirim ulang (cooldown sudah lewat) |
-| DOGE SHORT (baru) | ✅ Dikirim (action berbeda) |
-| Signal NO TRADE | ❌ Selalu difilter |
+| DOGE LONG sent 30 minutes ago | ❌ Blocked (120-minute cooldown) |
+| DOGE LONG sent 3 hours ago | ✅ Re-sent (cooldown expired) |
+| DOGE SHORT (new) | ✅ Sent (different action) |
+| Signal NO TRADE | ❌ Always filtered |
 
 ---
 
-## 🖨 Rangkuman Output Analisis Akhir (Console Report)
-Saat selesai dikalkulasi, robot bakal menyuguhkan *Dashboard Teks Lengkap 16 Tahap Analitik*:
-- Evaluasi Siklus Market *(Koreksi/Impulsif)*.
-- Pengenalan Fase Metodologi Wyckoff *(Akumulasi, Distribusi)*.
-- Pemetaan *Order Block*, *Fair Value Gap (FVG)* Tersembunyi, Area Likuiditas *(Buy/Sell Side)*.
-- Perhitungan Risiko & Rangkuman Setup dengan Batas Kesabaran (*Conviction Rating* > 70% diaggap Kuat).
-- Perincian Titik **Entry**, Target Pengambilan Profit **(TP)**, dan Jaring Pengaman **(SL)** secara mutlak.
+## 🖨 Final Analysis Output Summary (Console Report)
+Once calculations are complete, the robot will present a *Complete 16-Stage Analytical Text Dashboard*:
+- Market Cycle Evaluation *(Correction/Impulsive)*.
+- Wyckoff Methodology Phase Recognition *(Accumulation, Distribution)*.
+- *Order Block*, Hidden *Fair Value Gap (FVG)*, Liquidity Area *(Buy/Sell Side)* Mapping.
+- Risk Calculation & Setup Summary with Patience Threshold (*Conviction Rating* > 70% is considered Strong).
+- Precise **Entry** Points, Profit Target **(TP)**, and Safety Net **(SL)** Details.
 
 ---
 
 ## 1. Use Case Diagram
 
-Use Case Diagram menggambarkan interaksi antara aktor (pengguna) dengan fitur-fitur utama sistem.
+The Use Case Diagram illustrates the interaction between actors (users) and the system's main features.
 
-### 1.1 Aktor
+### 1.1 Actors
 
-| Aktor | Deskripsi |
-|-------|-----------|
-| **Trader (User)** | Pengguna yang mengoperasikan sistem melalui Web Dashboard atau CLI untuk melakukan analisis dan eksekusi trading. |
-| **OKX Exchange** | Platform pertukaran aset kripto yang menerima order dari sistem. |
-| **Data Provider (TradingView)** | Penyedia data OHLCV melalui library tvdatafeed dari berbagai exchange. |
-| **News API (gnews)** | Penyedia data headline berita untuk analisis NLP sentimen. |
+| Actor | Description |
+|-------|-------------|
+| **Trader (User)** | The user who operates the system through the Web Dashboard or CLI to perform analysis and trading execution. |
+| **OKX Exchange** | The cryptocurrency exchange platform that receives orders from the system. |
+| **Data Provider (TradingView)** | OHLCV data provider through the tvdatafeed library from various exchanges. |
+| **News API (gnews)** | News headline data provider for NLP sentiment analysis. |
 
 ### 1.2 Diagram
 
 ```mermaid
 graph LR
-    subgraph Aktor
+    subgraph Actors
         U["🧑‍💻 Trader"]
         OKX["🏦 OKX Exchange"]
         DP["📡 Data Provider"]
@@ -520,23 +520,23 @@ graph LR
     end
 
     subgraph "AI Trading Analysis Agent"
-        UC1["Konfigurasi Pair, Timeframe & Style"]
-        UC2["Jalankan Analisis Teknikal"]
-        UC3["Auto Scheduler & Monitor Pasar"]
+        UC1["Configure Pair, Timeframe & Style"]
+        UC2["Run Technical Analysis"]
+        UC3["Auto Scheduler & Market Monitor"]
         UC4["Anti-Spam & State Management"]
-        UC5["Notifikasi (Telegram/Discord)"]
-        UC6["Lihat Laporan & Visual Dashboard"]
-        UC7["Eksekusi Order ke OKX"]
-        UC8["Jalankan Backtesting"]
+        UC5["Notifications (Telegram/Discord)"]
+        UC6["View Reports & Visual Dashboard"]
+        UC7["Execute Order to OKX"]
+        UC8["Run Backtesting"]
     end
 
-    subgraph "Sub-Proses Analisis"
-        S1["Fetch Data OHLCV"]
-        S2["Fetch & Analisis Sentimen Berita"]
+    subgraph "Analysis Sub-Processes"
+        S1["Fetch OHLCV Data"]
+        S2["Fetch & Analyze News Sentiment"]
         S3["Generate Feature Engineering"]
-        S4["Deteksi Market Regime"]
-        S5["Analisis Analysis Engine (SMC, Wyckoff, Liquidity)"]
-        S6["Hitung Skor Probabilitas (Conviction)"]
+        S4["Detect Market Regime"]
+        S5["Analysis Engine (SMC, Wyckoff, Liquidity)"]
+        S6["Calculate Probability Score (Conviction)"]
         S7["Generate Trade Setup & Report"]
     end
 
@@ -563,26 +563,26 @@ graph LR
     UC7 --> OKX
 ```
 
-### 1.3 Deskripsi Use Case
+### 1.3 Use Case Descriptions
 
-| # | Use Case | Deskripsi |
-|---|----------|-----------|
-| UC1 | **Konfigurasi Pair, Timeframe & Style** | Trader mengatur opsi dasar via file `settings.yaml` (Pair, Timeframe, Style, Simulasi/Live, Alerts). |
-| UC2 | **Jalankan Analisis Teknikal** | Sistem mengambil data OHLCV dan berita, menjalankan ekstraksi bobot sentimen & fitur, market regime, SMC, Wyckoff, likuiditas, supply/demand, mengukur conviction probabilitas arah, lalu generasikan setup trading presisi. |
-| UC3 | **Auto Scheduler & Monitor Pasar** | Sistem melakukan siklus pemindaian berkala (otomatis setiap X menit) demi merekap kondisi pasar yang terbarukan. |
-| UC4 | **Anti-Spam & State Management** | Sistem menahan / mem-block pelemparan notifikasi jika sudah pernah memancarkan sinyal/setup pada ID status pasaran (Pair + TF + Action) yang sama guna menanggulangi repetisi spam. |
-| UC5 | **Notifikasi (Telegram/Discord)** | Setelah hasil analisa berhasil mendobrak filter skor _high conviction_ (lebih besar dari 70%) dan ter-verifikasi belum dikirim via filter anti-spam, sistem menembakkan rangkuman log analisis via bot. |
-| UC6 | **Lihat Laporan & Visual Dashboard** | Opsi trader merelakan diri sekadar memantau output pada GUI (Web), maupun layar Console Terminal 16-tahap analisa textually. |
-| UC7 | **Eksekusi Order ke OKX** | Mengirimkan limit order yang dilengkapi dengan jaring pengaman (_Take Profit_, _Stop Loss_) secara terintegrasi langsung menuju OKX. |
-| UC8 | **Jalankan Backtesting** | Menyimulasikan rasio Win-Rate performa menggunakan engine backtests demi membuktikan tumpuan conviction. |
+| # | Use Case | Description |
+|---|----------|-------------|
+| UC1 | **Configure Pair, Timeframe & Style** | Trader sets basic options via `settings.yaml` file (Pair, Timeframe, Style, Simulated/Live, Alerts). |
+| UC2 | **Run Technical Analysis** | System fetches OHLCV data and news, runs sentiment weight & feature extraction, market regime, SMC, Wyckoff, liquidity, supply/demand, measures directional conviction probability, then generates precise trade setups. |
+| UC3 | **Auto Scheduler & Market Monitor** | System performs periodic scanning cycles (automatically every X minutes) to recap updated market conditions. |
+| UC4 | **Anti-Spam & State Management** | System holds/blocks notification delivery if it has already emitted a signal/setup for the same market status ID (Pair + TF + Action) to prevent repetitive spam. |
+| UC5 | **Notifications (Telegram/Discord)** | After analysis results successfully pass the _high conviction_ score filter (greater than 70%) and are verified as not yet sent via the anti-spam filter, the system fires analysis log summaries via bot. |
+| UC6 | **View Reports & Visual Dashboard** | Trader option to simply monitor output on the GUI (Web), or the 16-stage textual analysis Console Terminal screen. |
+| UC7 | **Execute Order to OKX** | Sends limit orders equipped with safety nets (_Take Profit_, _Stop Loss_) integrated directly to OKX. |
+| UC8 | **Run Backtesting** | Simulates Win-Rate performance ratio using the backtesting engine to validate conviction foundations. |
 
 ---
 
 ## 2. Entity Relationship Diagram (ERD)
 
-ERD menggambarkan struktur data utama yang digunakan oleh sistem dan relasi antar entitas.
+The ERD illustrates the main data structures used by the system and the relationships between entities.
 
-> **Catatan:** Sistem ini berbasis **in-memory processing** (tidak menggunakan database relasional), sehingga ERD ini merepresentasikan hubungan antar struktur data (dataclass, dict, DataFrame) yang mengalir di dalam pipeline.
+> **Note:** This system is based on **in-memory processing** (does not use a relational database), so this ERD represents the relationships between data structures (dataclass, dict, DataFrame) flowing within the pipeline.
 
 ### 2.1 Diagram
 
@@ -600,17 +600,17 @@ erDiagram
     }
 
     OHLCV_DATA {
-        datetime timestamp "Waktu candle"
-        float open "Harga buka"
-        float high "Harga tertinggi"
-        float low "Harga terendah"
-        float close "Harga tutup"
+        datetime timestamp "Candle timestamp"
+        float open "Open price"
+        float high "High price"
+        float low "Low price"
+        float close "Close price"
         float volume "Volume"
     }
 
     NEWS_DATA {
         string[] headlines "List of Headlines"
-        float sentiment_score "Skor compound VADER (-1.0 to 1.0)"
+        float sentiment_score "VADER compound score (-1.0 to 1.0)"
     }
 
     FEATURES {
@@ -628,30 +628,30 @@ erDiagram
     }
 
     PROBABILITY_MODEL {
-        float bullish "Probabilitas bullish (%)"
-        float bearish "Probabilitas bearish (%)"
+        float bullish "Bullish probability (%)"
+        float bearish "Bearish probability (%)"
         string conviction "High | Medium | Low | Risk Off"
     }
 
     TRADE_SETUP {
         string preferred "long | short | neutral"
-        float entry "Harga entry"
-        float stop_loss "Harga stop loss"
-        float take_profit "Tak Profit Limit"
+        float entry "Entry price"
+        float stop_loss "Stop loss price"
+        float take_profit "Take profit limit"
         float rr "Risk-Reward Ratio"
     }
 
     STATE_CACHE {
         string signal_id "ID: PAIR_TF_ACTION"
-        datetime timestamp "Waktu eksekusi"
+        datetime timestamp "Execution timestamp"
         string status "ACTIVE | RECALIBRATING | NO TRADE"
     }
 
     OKX_ORDER {
         string inst_id "Instrument ID"
         string side "buy | sell"
-        float size "Ukuran order"
-        float leverage "Tuas leverage"
+        float size "Order size"
+        float leverage "Leverage multiplier"
     }
 
     CONFIGURATION ||--|| NOTIF_CONFIG : "contains"
@@ -667,23 +667,23 @@ erDiagram
     STATE_CACHE ||--|{ OKX_ORDER : "triggers execution over limit"
 ```
 
-### 2.2 Penjelasan Relasi
+### 2.2 Relationship Descriptions
 
-| Relasi | Deskripsi |
-|--------|-----------|
-| `CONFIGURATION` → `OHLCV_DATA` | Konfigurasi pair dan timeframe menentukan data apa yang di-fetch via Data Engine (TradingView). |
-| `CONFIGURATION` → `NEWS_DATA` | Konfigurasi menentukan pair aset yang di-query ke gnews. |
-| `OHLCV_DATA` → `ANALYSIS_ENGINE` | Lilin diklasifikasikan memformulasikan Market Structure, Wyckoff, Liquidity, dan SMC. |
-| `NEWS_DATA` + `FEATURES` + `ANALYSIS_ENGINE` → `PROBABILITY_MODEL` | Data sentimen media massal digabung perhitungan analitik fundamental dalam membentuk persentase Conviction yang terpercaya (Low, Medium, High). |
-| `PROBABILITY_MODEL` → `TRADE_SETUP` | Tingkat probabilitas tertinggi bakal menobatkan bias Long atau Short, juga presisi Take Profit & Stop-Loss. |
-| `TRADE_SETUP` → `STATE_CACHE` | Tiap sinyal yang tercipta harus lulus verifikasi deduplikasi State Engine. Apabila duplikat / repetitif, sinyal ditahan. |
-| `STATE_CACHE` → Notification & `OKX_ORDER` | Jika lulus sensor (belum spam), instruksi ditembak ke layer Notifikasi (Telegram) dan OKX Order Limit API. |
+| Relationship | Description |
+|--------------|-------------|
+| `CONFIGURATION` → `OHLCV_DATA` | Pair and timeframe configuration determines what data is fetched via the Data Engine (TradingView). |
+| `CONFIGURATION` → `NEWS_DATA` | Configuration determines the asset pair queried to gnews. |
+| `OHLCV_DATA` → `ANALYSIS_ENGINE` | Candles are classified to formulate Market Structure, Wyckoff, Liquidity, and SMC. |
+| `NEWS_DATA` + `FEATURES` + `ANALYSIS_ENGINE` → `PROBABILITY_MODEL` | Mass media sentiment data is combined with analytical fundamental calculations to form a reliable Conviction percentage (Low, Medium, High). |
+| `PROBABILITY_MODEL` → `TRADE_SETUP` | The highest probability level crowns the Long or Short bias, along with precise Take Profit & Stop-Loss. |
+| `TRADE_SETUP` → `STATE_CACHE` | Each generated signal must pass State Engine deduplication verification. If duplicate/repetitive, the signal is held. |
+| `STATE_CACHE` → Notification & `OKX_ORDER` | If it passes the filter (not spam), the instruction is fired to the Notification layer (Telegram) and OKX Order Limit API. |
 
 ---
 
-## 3. Arsitektur Pipeline (Alur Data)
+## 3. Pipeline Architecture (Data Flow)
 
-Berikut pemetaan Flowchart untuk 9-Layer Architecture:
+Below is the Flowchart mapping for the 9-Layer Architecture:
 
 ```mermaid
 flowchart TD
@@ -705,18 +705,18 @@ flowchart TD
     
     L6 --> L9["🛡 Layer 9: State Engine<br/>Anti-Spam Deduplication"]
     
-    L9 -- Lulus Filter --> L8["🔔 Layer 8: Notification Engine<br/>Telegram / Discord"]
-    L9 -- Tertolak --> REJ["🚫 Ignore (Duplikat / No Trade)"]
+    L9 -- Passed Filter --> L8["🔔 Layer 8: Notification Engine<br/>Telegram / Discord"]
+    L9 -- Rejected --> REJ["🚫 Ignore (Duplicate / No Trade)"]
 ```
 
 ---
 
-## 4. Mapping Module ke Struktur Kode
+## 4. Module to Code Structure Mapping
 
-Berdasarkan arsitektur modular utama:
+Based on the main modular architecture:
 
-| Layer (Versi README) | Engine Module | File Utama |
-|----------------------|---------------|------------|
+| Layer (README Version) | Engine Module | Main Files |
+|------------------------|---------------|------------|
 | **Layer 1** | `data_engine/` | `tradingview_connector.py`, `market_data.py` |
 | **Layer 2** | `feature_engine/` | `feature_extractor.py`, `indicator_features.py`, `liquidity_features.py` |
 | **Layer 2.5** | `news_engine/` | `news_fetcher.py`, `sentiment_analyzer.py`, `sentiment_score.py` |
@@ -731,4 +731,4 @@ Berdasarkan arsitektur modular utama:
 
 
 ---
-**Disclaimer**: Perdagangan Crypto dan Pasar Kapital membawa risiko kerugian substansial. Tools berbasis kecerdasan AI ini ditujukan murni sebagai ekstensi perhitungan data matematis pendukung (Assistance Analysis) dan sarana simulasi edukasional, bukan merupakan jaminan saran keuangan bebas risiko! Gunakan manajemen portfolio yang baik.
+**Disclaimer**: Crypto and Capital Market trading carries substantial risk of loss. This AI-based tool is intended purely as a mathematical data calculation assistance extension (Analysis Assistance) and educational simulation tool, and does not constitute risk-free financial advice! Use proper portfolio management.
