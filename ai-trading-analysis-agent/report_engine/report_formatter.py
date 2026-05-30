@@ -215,7 +215,7 @@ def format_report(report: AnalysisReport) -> str:
         
         advice = es.get("execution_advice")
         if advice:
-            plan_bullets.append(f"* **Eksekusi:** {advice}")
+            plan_bullets.append(f"* **Execution:** {advice}")
             
         plan_bullets.extend([
             f"* **Trigger:** {trigger_line}",
@@ -243,7 +243,7 @@ def format_report(report: AnalysisReport) -> str:
         _note_idx += 1
     
     if report.analysis_summary.get("volatility_squeeze"):
-        notes.append(f"{_note_idx}. **⚠️ Volatility Squeeze:** BB Width sangat rendah — breakout imminent. Tunggu konfirmasi arah sebelum entry.")
+        notes.append(f"{_note_idx}. **⚠️ Volatility Squeeze:** BB Width is very low — breakout imminent. Wait for directional confirmation before entry.")
         _note_idx += 1
     
     if report.analysis_summary.get("rsi_warning"):

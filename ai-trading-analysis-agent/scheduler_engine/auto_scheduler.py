@@ -58,11 +58,11 @@ def make_job(market: str, timeframe: str, style: str):
 
 def start_scheduler(args):
     logger.info("=" * 60)
-    logger.info("🤖 AntiGravity Auto-Scheduler")
+    logger.info("🤖 AI Trading Auto-Scheduler")
     logger.info(f"   Market    : {args.market.upper()}")
     logger.info(f"   Timeframe : {args.timeframe}")
     logger.info(f"   Style     : {args.style}")
-    logger.info(f"   Interval  : setiap {args.interval} menit")
+    logger.info(f"   Interval  : every {args.interval} minutes")
     logger.info("=" * 60)
 
     scheduler = BlockingScheduler()
@@ -77,7 +77,7 @@ def start_scheduler(args):
     logger.info("🚀 Running initial bootstrap scan...")
     job_fn()
 
-    logger.info(f"✅ Scheduler active — next run in {args.interval} menit. Tekan Ctrl+C untuk berhenti.")
+    logger.info(f"✅ Scheduler active — next run in {args.interval} minutes. Press Ctrl+C to stop.")
     try:
         scheduler.start()
     except (KeyboardInterrupt, SystemExit):
@@ -86,10 +86,10 @@ def start_scheduler(args):
 
 def main():
     parser = argparse.ArgumentParser(
-        description="AntiGravity Auto-Scheduler — Loop otomatis scanner + notifikasi",
+        description="AI Trading Auto-Scheduler — Automatic scanner loop + notifications",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
-Contoh penggunaan:
+Usage examples:
   py -3 scheduler_engine/auto_scheduler.py --timeframe 1h --style swing --interval 60
   py -3 scheduler_engine/auto_scheduler.py --market forex --timeframe 4h --style swing --interval 240
   py -3 scheduler_engine/auto_scheduler.py --market all --timeframe 15m --style scalping --interval 15
@@ -97,14 +97,14 @@ Contoh penggunaan:
 
     parser.add_argument("--market", type=str, default="crypto",
                         choices=["crypto", "forex", "stocks", "indexes", "all"],
-                        help="Pasar yang dipindai (default: crypto)")
+                        help="Target market to scan (default: crypto)")
     parser.add_argument("--timeframe", type=str, default="1h",
-                        help="Timeframe analisis, misal: 5m, 15m, 1h, 4h, 1d (default: 1h)")
+                        help="Analysis timeframe, e.g.: 5m, 15m, 1h, 4h, 1d (default: 1h)")
     parser.add_argument("--style", type=str, default="swing",
                         choices=["scalping", "intraday", "swing"],
-                        help="Gaya trading (default: swing)")
+                        help="Trading style (default: swing)")
     parser.add_argument("--interval", type=int, default=60,
-                        help="Jeda perulangan dalam MENIT (default: 60)")
+                        help="Loop interval in MINUTES (default: 60)")
 
     args = parser.parse_args()
     start_scheduler(args)

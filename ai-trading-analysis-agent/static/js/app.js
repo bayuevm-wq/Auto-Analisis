@@ -98,39 +98,39 @@ const smartPrice = (val) => {
 
 // ========== CONTRACT SIZES (OKX SWAP) ==========
 const CONTRACT_SIZES = {
-    'BTC/USDT':  0.01,    // 1 kontrak = 0.01 BTC
-    'ETH/USDT':  0.1,     // 1 kontrak = 0.1 ETH
-    'XRP/USDT':  100,     // 1 kontrak = 100 XRP
-    'BNB/USDT':  0.01,    // 1 kontrak = 0.01 BNB
-    'SOL/USDT':  1,       // 1 kontrak = 1 SOL
-    'ADA/USDT':  100,     // 1 kontrak = 100 ADA
-    'DOGE/USDT': 1000,    // 1 kontrak = 1000 DOGE
-    'TRX/USDT':  1000,    // 1 kontrak = 1000 TRX
-    'AVAX/USDT': 1,       // 1 kontrak = 1 AVAX
-    'LINK/USDT': 1,       // 1 kontrak = 1 LINK
-    'DOT/USDT':  1,       // 1 kontrak = 1 DOT
-    'TON/USDT':  1,       // 1 kontrak = 1 TON
-    'SHIB/USDT': 1000000, // 1 kontrak = 1M SHIB
-    'XLM/USDT':  100,     // 1 kontrak = 100 XLM
-    'SUI/USDT':  1,       // 1 kontrak = 1 SUI
-    'HBAR/USDT': 100,     // 1 kontrak = 100 HBAR
-    'BCH/USDT':  0.1,     // 1 kontrak = 0.1 BCH
-    'LTC/USDT':  1,       // 1 kontrak = 1 LTC
-    'UNI/USDT':  1,       // 1 kontrak = 1 UNI
-    'NEAR/USDT': 10,      // 1 kontrak = 10 NEAR
-    'HYPE/USDT': 1,       // 1 kontrak = 1 HYPE
-    'ARB/USDT':  10,      // 1 kontrak = 10 ARB
-    'ONDO/USDT': 10,      // 1 kontrak = 10 ONDO
-    'FET/USDT':  10,      // 1 kontrak = 10 FET
-    'W/USDT':   10,      // 1 kontrak = 10 W
-    'WLD/USDT':  1,       // 1 kontrak = 1 WLD
-    'ENA/USDT':  10,      // 1 kontrak = 10 ENA
-    'PENDLE/USDT': 1,     // 1 kontrak = 1 PENDLE
-    'ORDI/USDT': 0.1,     // 1 kontrak = 0.1 ORDI
-    'STRK/USDT': 10,      // 1 kontrak = 10 STRK
-    'POL/USDT':  10,      // 1 kontrak = 10 POL
-    'RENDER/USDT': 1,     // 1 kontrak = 1 RENDER
-    'G/USDT':    100,     // 1 kontrak = 100 G
+    'BTC/USDT':  0.01,    // 1 contract = 0.01 BTC
+    'ETH/USDT':  0.1,     // 1 contract = 0.1 ETH
+    'XRP/USDT':  100,     // 1 contract = 100 XRP
+    'BNB/USDT':  0.01,    // 1 contract = 0.01 BNB
+    'SOL/USDT':  1,       // 1 contract = 1 SOL
+    'ADA/USDT':  100,     // 1 contract = 100 ADA
+    'DOGE/USDT': 1000,    // 1 contract = 1000 DOGE
+    'TRX/USDT':  1000,    // 1 contract = 1000 TRX
+    'AVAX/USDT': 1,       // 1 contract = 1 AVAX
+    'LINK/USDT': 1,       // 1 contract = 1 LINK
+    'DOT/USDT':  1,       // 1 contract = 1 DOT
+    'TON/USDT':  1,       // 1 contract = 1 TON
+    'SHIB/USDT': 1000000, // 1 contract = 1M SHIB
+    'XLM/USDT':  100,     // 1 contract = 100 XLM
+    'SUI/USDT':  1,       // 1 contract = 1 SUI
+    'HBAR/USDT': 100,     // 1 contract = 100 HBAR
+    'BCH/USDT':  0.1,     // 1 contract = 0.1 BCH
+    'LTC/USDT':  1,       // 1 contract = 1 LTC
+    'UNI/USDT':  1,       // 1 contract = 1 UNI
+    'NEAR/USDT': 10,      // 1 contract = 10 NEAR
+    'HYPE/USDT': 1,       // 1 contract = 1 HYPE
+    'ARB/USDT':  10,      // 1 contract = 10 ARB
+    'ONDO/USDT': 10,      // 1 contract = 10 ONDO
+    'FET/USDT':  10,      // 1 contract = 10 FET
+    'W/USDT':   10,      // 1 contract = 10 W
+    'WLD/USDT':  1,       // 1 contract = 1 WLD
+    'ENA/USDT':  10,      // 1 contract = 10 ENA
+    'PENDLE/USDT': 1,     // 1 contract = 1 PENDLE
+    'ORDI/USDT': 0.1,     // 1 contract = 0.1 ORDI
+    'STRK/USDT': 10,      // 1 contract = 10 STRK
+    'POL/USDT':  10,      // 1 contract = 10 POL
+    'RENDER/USDT': 1,     // 1 contract = 1 RENDER
+    'G/USDT':    100,     // 1 contract = 100 G
     'APT/USDT': 1, 'ICP/USDT': 1, 'TAO/USDT': 0.01, 'ETC/USDT': 10,
     'FIL/USDT': 10, 'STX/USDT': 10, 'ATOM/USDT': 10, 'IMX/USDT': 10, 
     'AR/USDT': 1, 'INJ/USDT': 1, 'OP/USDT': 10, 'PEPE/USDT': 1000000, 
@@ -278,16 +278,16 @@ document.addEventListener('DOMContentLoaded', () => {
         const size = parseFloat(execSize.value) || 0;
         
         let multiplier = 1;
-        let hintText = '1 Unit = 1 Kontrak';
+        let hintText = '1 Unit = 1 Contract';
         
         // Find contract size (exact match only to prevent false positives like G matching EGLD)
         if (CONTRACT_SIZES[pair] !== undefined) {
             multiplier = CONTRACT_SIZES[pair];
             const coinName = pair.includes('/') ? pair.split('/')[0] : pair;
             if (multiplier >= 1000) {
-                hintText = `1 Kontrak = ${multiplier.toLocaleString()} ${coinName}`;
+                hintText = `1 Contract = ${multiplier.toLocaleString()} ${coinName}`;
             } else {
-                hintText = `1 Kontrak = ${multiplier} ${coinName}`;
+                hintText = `1 Contract = ${multiplier} ${coinName}`;
             }
         }
         
@@ -318,7 +318,7 @@ document.addEventListener('DOMContentLoaded', () => {
     btnAnalyze.addEventListener('click', async () => {
         btnAnalyze.disabled = true;
         btnAnalyze.textContent = 'Analyzing...';
-        terminalOutput.textContent = '[*] Mengambil data market dari server TradingView...\n[*] AI Engine sedang mengekstraksi struktur pasar dan likuiditas!\n[*] Harap tunggu beberapa detik...';
+        terminalOutput.textContent = '[*] Fetching market data from TradingView server...\n[*] AI Engine is extracting market structure and liquidity!\n[*] Please wait a few seconds...';
         
         try {
             const res = await fetch('/api/analyze', {
@@ -464,13 +464,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 btnShort.disabled = false;
                 
                 updateMarginPreview();
-                showToast('Analisa AI Selesai!');
+                showToast('AI Analysis Complete!');
             } else {
                 throw new Error(data.error);
             }
         } catch (e) {
-            terminalOutput.textContent = `[!] Error terjadi pada sistem AI:\n${e.message}`;
-            showToast('Gagal melakukan kalkulasi AI', 'error');
+            terminalOutput.textContent = `[!] Error occurred in AI system:\n${e.message}`;
+            showToast('AI calculation failed', 'error');
         } finally {
             btnAnalyze.disabled = false;
             btnAnalyze.textContent = 'Generate Analysis';
@@ -479,7 +479,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // ========== EXECUTE ==========
     const executeTrade = async (side) => {
-        if (!confirm(`Tembak pesanan eksekusi ${side.toUpperCase()} ke OKX sekarang?`)) return;
+        if (!confirm(`Send ${side.toUpperCase()} execution order to OKX now?`)) return;
         
         const btn = side === 'long' ? btnLong : btnShort;
         const originalText = btn.textContent;

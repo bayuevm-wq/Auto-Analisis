@@ -72,8 +72,16 @@ def get_style_params(style: str | None) -> Dict[str, Any]:
 
 
 def load_config(path: str) -> Dict[str, Any]:
-    with open(path, "r", encoding="utf-8") as handle:
-        return yaml.safe_load(handle)
+    try:
+        with open(path, "r", encoding="utf-8") as handle:
+            data = yaml.safe_load(handle)
+            return data if isinstance(data, dict) else {}
+    except FileNotFoundError:
+        logger.warning(f"Config file not found at {path}. Using default/command-line arguments.")
+        return {}
+    except Exception as e:
+        logger.warning(f"Failed to load config from {path}: {e}. Using default/command-line arguments.")
+        return {}
 
 
 def premium_discount(df: pd.DataFrame) -> Dict[str, float]:
@@ -598,7 +606,7 @@ def trade_setup(
             "base_conviction": f"{prob:.1f}%",
             "decay_adj": f"×{decay_multi:.2f}",
             "final_conviction": f"{final_prob:.1f}% → Status: {action}",
-            "structure_age": f"{hours_elapsed:.1f} jam ({(hours_elapsed/validity_hours)*100:.0f}% of validity) → {decay_status}"
+            "structure_age": f"{hours_elapsed:.1f} hours ({(hours_elapsed/validity_hours)*100:.0f}% of validity) → {decay_status}"
         }
     }
 
@@ -620,20 +628,20 @@ def get_time_estimate(timeframe: str, multiplier_low: int = 3, multiplier_high: 
         if high_val >= 60:
             if low_val >= 60:
                 low_val, high_val = round(low_val / 60, 1), round(high_val / 60, 1)
-                return f"±{low_val}-{high_val} jam"
-        return f"±{low_val}-{high_val} menit"
+                return f"±{low_val}-{high_val} hours"
+        return f"±{low_val}-{high_val} minutes"
     elif unit == 'h':
         if high_val >= 24:
             if low_val >= 24:
                 low_val, high_val = round(low_val / 24, 1), round(high_val / 24, 1)
-                return f"±{low_val}-{high_val} hari"
-        return f"±{low_val}-{high_val} jam"
+                return f"±{low_val}-{high_val} days"
+        return f"±{low_val}-{high_val} hours"
     elif unit == 'd':
-        return f"±{low_val}-{high_val} hari"
+        return f"±{low_val}-{high_val} days"
     elif unit == 'w':
-        return f"±{low_val}-{high_val} minggu"
+        return f"±{low_val}-{high_val} weeks"
     elif unit == 'mo':
-        return f"±{low_val}-{high_val} bulan"
+        return f"±{low_val}-{high_val} months"
     return f"±{low_val}-{high_val} {unit}"
 
 def entry_trigger(structure: Dict[str, object], setup: Dict[str, Any], fvg_ce: List[Dict[str, object]] = None) -> Dict[str, str]:
@@ -745,10 +753,10 @@ def fetch_macro_context(pair: str) -> Dict[str, Any]:
 def generate_management_rules(timeframe: str, long_invalid: float, short_invalid: float) -> tuple[Dict[str, str], Dict[str, str]]:
     time_est = get_time_estimate(timeframe)
     mgmt = {
-        "validity": f"3-5 candle ({time_est} pada {timeframe})",
+        "validity": f"3-5 candles ({time_est} on {timeframe})",
         "long_invalidation": f"Close below ${long_invalid:.2f} (structural break)",
         "short_invalidation": f"Close above ${short_invalid:.2f} (supply break)",
-        "timeout_rule": f"Jika tidak terjemput dalam {time_est.split(' ')[0]} → re-evaluate"
+        "timeout_rule": f"If not triggered within {time_est.split(' ')[0]} → re-evaluate"
     }
     
     triggers = {
@@ -1028,7 +1036,7 @@ def build_report(
     # Dual check: z-score AND raw BB Width for squeeze detection
     is_squeeze = zscore < -1.0 or (bb_w > 0 and bb_w < 0.025)
     if is_squeeze:
-        analysis_summary["bb_width"] = f"🔶 Volatility Squeeze (BB Width: {bb_w:.4f}) — Tunggu arah breakout squeeze sebelum entry"
+        analysis_summary["bb_width"] = f"🔶 Volatility Squeeze (BB Width: {bb_w:.4f}) — Wait for breakout direction before entry"
         analysis_summary["volatility_squeeze"] = True
         volatility_emoji = "🔶 Squeeze (pending breakout)"
     elif zscore > 1.0:
@@ -1043,9 +1051,9 @@ def build_report(
     # ── RSI Near-Oversold / Overbought Warning ──
     rsi_val = features.get("rsi", 50.0)
     if rsi_val < 40:
-        analysis_summary["rsi_warning"] = f"⚠️ RSI {rsi_val:.2f} mendekati oversold — risiko bounce tiba-tiba untuk short setup"
+        analysis_summary["rsi_warning"] = f"⚠️ RSI {rsi_val:.2f} approaching oversold — risk of sudden bounce for short setup"
     elif rsi_val > 60:
-        analysis_summary["rsi_warning"] = f"⚠️ RSI {rsi_val:.2f} mendekati overbought — risiko rejection untuk long setup"
+        analysis_summary["rsi_warning"] = f"⚠️ RSI {rsi_val:.2f} approaching overbought — risk of rejection for long setup"
     else:
         analysis_summary["rsi_warning"] = None
     
@@ -1120,9 +1128,9 @@ def build_report(
     execution_advice = ""
     preferred_side = setup_data.get("preferred", "neutral")
     if preferred_side == "short" and last_price < discount_lvl and discount_lvl > 0:
-        execution_advice += f"Jangan Market Sell sekarang! Harga sedang di area Discount (< ${discount_lvl:,.2f}). Tetap gunakan Short Limit di area Premium/Pullback. "
+        execution_advice += f"Do not Market Sell now! Price is in the Discount zone (< ${discount_lvl:,.2f}). Use Short Limit orders in the Premium/Pullback zone instead. "
     elif preferred_side == "long" and last_price > premium_lvl and premium_lvl > 0:
-        execution_advice += f"Jangan Market Buy sekarang! Harga sedang di area Premium (> ${premium_lvl:,.2f}). Tetap gunakan Long Limit di area Discount/Pullback. "
+        execution_advice += f"Do not Market Buy now! Price is in the Premium zone (> ${premium_lvl:,.2f}). Use Long Limit orders in the Discount/Pullback zone instead. "
         
     macd_bull = features.get("macd_bullish_div")
     rsi_bull = features.get("bullish_divergence")
@@ -1133,12 +1141,12 @@ def build_report(
         div_srcs = []
         if rsi_bull: div_srcs.append("RSI")
         if macd_bull: div_srcs.append("MACD")
-        execution_advice += f"Risiko: Ada Bullish Divergence ({' & '.join(div_srcs)}). Ini peringatan bahwa harga kemungkinan besar akan memantul naik dulu sebelum lanjut turun."
+        execution_advice += f"Risk: Bullish Divergence detected ({' & '.join(div_srcs)}). This warns that price is likely to bounce up first before continuing down."
     elif preferred_side == "long" and (macd_bear or rsi_bear):
         div_srcs = []
         if rsi_bear: div_srcs.append("RSI")
         if macd_bear: div_srcs.append("MACD")
-        execution_advice += f"Risiko: Ada Bearish Divergence ({' & '.join(div_srcs)}). Ini peringatan bahwa harga kemungkinan besar akan koreksi turun dulu sebelum lanjut naik."
+        execution_advice += f"Risk: Bearish Divergence detected ({' & '.join(div_srcs)}). This warns that price is likely to correct down first before continuing up."
     
     # Override action if news filter blocks
     final_action = setup_data.get("action", "WAIT")
@@ -1158,9 +1166,9 @@ def build_report(
         else:  # REDUCE SIZE → NO TRADE
             final_action = "NO TRADE"
             setup_data["action"] = final_action
-            setup_data["conviction"] = f"🔴 NO TRADE (Volatility Squeeze — Tunggu breakout)"
+            setup_data["conviction"] = f"🔴 NO TRADE (Volatility Squeeze — Wait for breakout)"
             setup_data["risk_alloc_str"] = "0% risk (SQUEEZE HOLD)"
-        execution_advice += " 🔶 Volatility Squeeze aktif — entry ditunda sampai BB Width > 0.030 (breakout resolution)."
+        execution_advice += " 🔶 Volatility Squeeze active — entry delayed until BB Width > 0.030 (breakout resolution)."
     
     executive_summary = {
         "action": final_action,
@@ -1266,6 +1274,13 @@ def build_report(
 
 
 def main() -> None:
+    import sys
+    if hasattr(sys.stdout, "reconfigure"):
+        try:
+            sys.stdout.reconfigure(encoding="utf-8")
+        except Exception:
+            pass
+
     parser = argparse.ArgumentParser(description="AI Trading Chart Analysis Agent")
     parser.add_argument("--pair", type=str, help="Trading pair or TV symbol, e.g., BTC/USDT or BINANCE:BTCUSDT")
     parser.add_argument("--timeframe", type=str, help="Timeframe, e.g., H4")

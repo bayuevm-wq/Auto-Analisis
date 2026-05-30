@@ -1,56 +1,27 @@
-# Langkah konfigurasi cepat:
-# 1) Isi pair/timeframe/limit/trade_style.
-# 2) (Opsional) isi tv_username/tv_password untuk akses TradingView.
-# 3) Aktifkan OKX: okx.enable: true.
-# 4) Simpan kredensial OKX sebagai env var di PowerShell:
-#    $env:OKX_API_KEY="..."
-#    $env:OKX_API_SECRET="..."
-#    $env:OKX_PASSPHRASE="..."
-# 5) Set ukuran order: okx.order_notional (USDT) atau okx.order_size.
-# 6) Pilih arah eksekusi: okx.submit = preferred | long | short | both.
-#    - Manual override: gunakan submit: long/short untuk memaksa arah walau preferred berbeda.
-# 7) Derivatif: set trade_mode: cross/isolated + inst_id (contoh BTC-USDT-SWAP)
-#    + leverage dan mgn_mode.
-# 8) Spot: trade_mode: cash (leverage diabaikan).
-# 9) Hedge (posSide):
-#    - pos_side: auto -> ikut sinyal yang dikirim
-#    - pos_side: long/short -> paksa sisi posisi
-# 10) SSL error: set okx.ssl_verify: false (hanya troubleshooting, tidak aman).
+# AI Trading Analysis Agent Configuration
+# Format Symbol: EXCHANGE:SYMBOL (e.g., BINANCE:BTCUSDT, OANDA:EURUSD)
 
-pair: DOGE/USDT
-timeframe: H4
+pair: "BINANCE:BTCUSDT"
+timeframe: "1h"
 limit: 500
-trade_style: swing
+trade_style: "swing"
+
+# TradingView Authentication (optional, leave blank for guest access)
 tv_username: ""
 tv_password: ""
+
+# OKX Execution Engine configuration
 okx:
-  enable: true
-  mode: live
-  api_key: ""
-  api_secret: ""
-  passphrase: ""
-  inst_id: "DOGE-USDT-SWAP"
-  order_size: 1
-  order_notional: 0
-  trade_mode: isolated
-  submit: long
-  pos_side: "auto"
-  leverage: 50
-  auto_leverage: true
-  mgn_mode: "isolated"
-  ssl_verify: true
-  base_url: "https://www.okx.com"
-
-# Modul Analisis Sentimen Berita
-news:
-  enable: true
-  source: "gnews"  # Pilihan: 'gnews', 'cryptopanic'
-  cryptopanic_token: "" # Hanya dipakai bila source 'cryptopanic'
-
-# Rantai Output Penyiaran Alert
-notifications:
-  enable_telegram: true
-  enable_discord: false
-  telegram_token: ""    # Dibiarkan kosong, akan memprioritaskan bacaan dari .env
-  telegram_chat_id: ""  # Dibiarkan kosong, akan memprioritaskan bacaan dari .env
-  discord_webhook: ""   # Dibiarkan kosong, akan memprioritaskan bacaan dari .env
+  enable: false            # Set to true to enable OKX order submit
+  mode: "simulated"        # 'simulated' (demo trading) or 'live'
+  inst_id: "BTC-USDT-SWAP" # OKX Instrument ID (e.g. BTC-USDT or BTC-USDT-SWAP)
+  trade_mode: "isolated"   # 'cash', 'cross', or 'isolated'
+  mgn_mode: "isolated"     # 'cross' or 'isolated'
+  leverage: 5.0            # Leverage to use (for margin/futures)
+  auto_leverage: false     # Automatically calculate leverage based on SL
+  order_size: 0.0          # Set order size (in contract/base currency lots). Set 0 to use order_notional
+  order_notional: 10.0     # Set order size in USD/USDT value. Set 0 to use order_size
+  pos_side: "auto"         # 'auto' (AI direction), 'long', or 'short'
+  submit: "preferred"      # 'preferred' (only preferred side), 'both', or 'none'
+  ssl_verify: true         # Set to false if experiencing local SSL/certificate errors
+  base_url: "https://okx.com"
